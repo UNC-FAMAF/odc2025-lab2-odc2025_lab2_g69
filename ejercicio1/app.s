@@ -1,53 +1,183 @@
-	.equ SCREEN_WIDTH, 		640
-	.equ SCREEN_HEIGH, 		480
-	.equ BITS_PER_PIXEL,  	32
+    .equ SCREEN_WIDTH,      640
+    .equ SCREEN_HEIGH,      480
+    .equ BITS_PER_PIXEL,    32
 
-	.equ GPIO_BASE,      0x3f200000
-	.equ GPIO_GPFSEL0,   0x00
-	.equ GPIO_GPLEV0,    0x34
+    .equ GPIO_BASE,         0x3f200000
+    .equ GPIO_GPFSEL0,      0x00
+    .equ GPIO_GPLEV0,       0x34
 
-	.globl main
+    .globl main
+    .global draw_square
+	.global draw_rectangle
 
 main:
-	// x0 contiene la direccion base del framebuffer
- 	mov x20, x0	// Guarda la dirección base del framebuffer en x20
-	//---------------- CODE HERE ------------------------------------
+    // x0 contiene la dirección base del framebuffer
+    mov     x20, x0           // Guardar copia en x20
 
-	movz x10, 0xC7, lsl 16
-	movk x10, 0x1585, lsl 00
+    //---------------------------------------------------------
+    // Pintar fondo de color rosa (0x00C71585)
+    //---------------------------------------------------------
+    movz    w10, 0xC7, lsl 16
+    movk    w10, 0x1585, lsl 0
 
-	mov x2, SCREEN_HEIGH         // Y Size
-loop1:
-	mov x1, SCREEN_WIDTH         // X Size
-loop0:
-	stur w10,[x0]  // Colorear el pixel N
-	add x0,x0,4	   // Siguiente pixel
-	sub x1,x1,1	   // Decrementar contador X
-	cbnz x1,loop0  // Si no terminó la fila, salto
-	sub x2,x2,1	   // Decrementar contador Y
-	cbnz x2,loop1  // Si no es la última fila, salto
+    mov     x2, SCREEN_HEIGH     // contador de filas
+	loop1:
+		mov     x1, SCREEN_WIDTH     // contador de columnas
+	loop0:
+		str     w10, [x0]            // pintar píxel
+		add     x0, x0, 4
+		sub     x1, x1, 1
+		cbnz    x1, loop0
+		sub     x2, x2, 1
+		cbnz    x2, loop1
 
-	// Ejemplo de uso de gpios
-	mov x9, GPIO_BASE
+		//---------------------------------------------------------
+		// Dibujar cuadrado amarillo
+		//---------------------------------------------------------
+		mov     x11, #100           // x inicial
+		mov     x12, #50            // y inicial
+		mov     x13, #32            // tamaño del cuadrado
+		mov     x14, x20            // framebuffer base
+		movz    w15, 0xFF00, lsl 0
+		movk    w15, 0x00FF, lsl 16 // amarillo 0x00FFFF00
 
-	// Atención: se utilizan registros w porque la documentación de broadcom
-	// indica que los registros que estamos leyendo y escribiendo son de 32 bits
+		bl      draw_square
 
-	// Setea gpios 0 - 9 como lectura
-	str wzr, [x9, GPIO_GPFSEL0]
+		//---------------------------------------------------------
+		// Dibujar rectangulo verde
+		//---------------------------------------------------------
+		mov     x11, #300          // x inicial
+		mov     x12, #200          // y inicial
+		mov     x13, #20           // ancho (vertical)
+		mov     x14, #90           // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xFF00, lsl 0     // 0x0000FF00 
+		movk    w16, 0xFF00, lsl 16    // 0xFF00FF00 
 
-	// Lee el estado de los GPIO 0 - 31
-	ldr w10, [x9, GPIO_GPLEV0]
+		
 
-	// And bit a bit mantiene el resultado del bit 2 en w10
-	and w11, w10, 0b10
+		bl      draw_rectangle
 
-	// w11 será 1 si había un 1 en la posición 2 de w10, si no será 0
-	// efectivamente, su valor representará si GPIO 2 está activo
-	lsr w11, w11, 1
 
-	//---------------------------------------------------------------
-	// Infinite Loop
+    //---------------------------------------------------------
+    // Leer GPIO (opcional)
+    //---------------------------------------------------------
+    mov     x9, GPIO_BASE
+    str     wzr, [x9, GPIO_GPFSEL0] // configurar entrada
+    ldr     w10, [x9, GPIO_GPLEV0]
+    and     w11, w10, 0b10
+    lsr     w11, w11, 1
 
 InfLoop:
-	b InfLoop
+    b       InfLoop
+
+
+
+//
+//						   _                _   _                 
+//				 ___ _   _| |__  _ __ _   _| |_(_)_ __   __ _ ___ 
+//				/ __| | | | '_ \| '__| | | | __| | '_ \ / _` / __|
+//				\__ \ |_| | |_) | |  | |_| | |_| | | | | (_| \__ \
+//				|___/\__,_|_.__/|_|   \__,_|\__|_|_| |_|\__,_|___/
+//				/ / _|_   _ _ __   ___(_) ___  _ __   ___  __\ \ 
+//				| | |_| | | | '_ \ / __| |/ _ \| '_ \ / _ \/ __| |
+//				| |  _| |_| | | | | (__| | (_) | | | |  __/\__ \ |
+//				| |_|  \__,_|_| |_|\___|_|\___/|_| |_|\___||___/ |
+//				\_\                                          /_/ 
+//
+
+//---------------------------------------------------------
+// Subrutina: draw_square
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = tamaño
+// x14 = framebuffer base
+// x15 = color
+//---------------------------------------------------------
+draw_square:
+    // Guardamos la altura restante en x16 (contador vertical)
+    mov     x16, x13            // x16 = altura del cuadrado (filas restantes)
+
+    // y_actual = y inicial -> usamos x17 como y_actual
+    mov     x17, x12            // x17 = fila actual
+
+.loop_y_sq:
+    // Ancho restante en x18 (contador horizontal)
+    mov     x18, x13            // x18 = ancho del cuadrado (columnas restantes)
+
+    // x_actual = x inicial -> usamos x19 como x_actual
+    mov     x19, x11            // x19 = columna actual
+
+.loop_x_sq:
+    // Calcular offset en memoria: offset = (y_actual * SCREEN_WIDTH + x_actual) * 4
+    mov     x20, x17            // x20 = y_actual
+    mov     x21, SCREEN_WIDTH   // x21 = SCREEN_WIDTH
+    mul     x20, x20, x21       // x20 = y_actual * SCREEN_WIDTH
+    add     x20, x20, x19       // x20 = y_actual * SCREEN_WIDTH + x_actual
+    lsl     x20, x20, 2         // x20 = offset en bytes (4 bytes por píxel)
+
+    // Escribir color en framebuffer[offset]
+    str     w15, [x14, x20]     // framebuffer[offset] = color
+
+    // Incrementar columna actual y decrementar contador horizontal
+    add     x19, x19, 1         // x_actual++
+    subs    x18, x18, 1         // columnas restantes--
+    b.ne    .loop_x_sq             // si columnas restantes ≠ 0, repetir loop_x_sq
+
+    // Incrementar fila actual y decrementar contador vertical
+    add     x17, x17, 1         // y_actual++
+    subs    x16, x16, 1         // filas restantes--
+    b.ne    .loop_y_sq          // si filas restantes ≠ 0, repetir loop_y_sq
+
+    ret                         // retornar al programa que llamó
+
+//---------------------------------------------------------
+// Subrutina: draw_rectangle
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = tamaño x
+// x14 = tamaño y
+// x15 = framebuffer base
+// x16 = color
+//---------------------------------------------------------
+
+draw_rectangle :
+
+	// inicializamos el contador de Y
+	mov x17, x14
+	// guardamos la posicion de y en x18
+	mov x18,x12
+
+loop_y_rec:
+	// inicializamos el contador de x con el valor inicial 
+	mov x19, x13
+	//guardamos la posicion incial de x
+	mov x21, x11
+
+loop_x_rec: 
+    // Calcular offset
+    mov     x24, x18           // y_actual
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x21      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+
+    // Escribir pixel
+    str     w16, [x15, x24]    // framebuffer[offset] = color
+
+    // Incrementar x_actual y continuar
+    add     x21, x21, 1
+    subs    x19, x19, 1
+    b.ne    loop_x_rec
+
+
+    // Incrementar y_actual y decrementar contador vertical
+    add     x18, x18, 1
+    subs    x17, x17, 1
+    b.ne    loop_y_rec
+
+    ret
