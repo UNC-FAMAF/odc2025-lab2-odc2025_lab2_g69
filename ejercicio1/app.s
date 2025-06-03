@@ -6,7 +6,7 @@
     .equ GPIO_GPFSEL0,      0x00
     .equ GPIO_GPLEV0,       0x34
 
-    .globl main
+    .global main
     .global draw_square
 	.global draw_rectangle
 
@@ -104,10 +104,23 @@ main:
     mov     x12, #240        // centro y
     mov     x13, #50         // radio
     mov     x14, x20         // framebuffer base
-    movz    w15, 0xFF00, lsl 0
-    movk    w15, 0x00FF, lsl 16   // rojo: 0x00FF0000
+    movz    w15, 0x9900, lsl 0
+    movk    w15, 0x0099, lsl 16   
 
     bl      draw_circle
+
+
+
+    //---------------------------------------------------------
+    // Dibujar nube
+    //---------------------------------------------------------
+    mov     x11, #320        // centro x
+    mov     x12, #240        // centro y
+    mov     x13, #10         // radio
+
+    bl draw_claud
+
+
 
 InfLoop:
     b       InfLoop
@@ -342,3 +355,41 @@ loop_x_tri :
     b.ne loop_y_tri
     
     ret
+
+draw_claud: 
+    // x11 posicion en x
+    // x12 posicion en y
+    // x13 radio
+
+
+    mov x29, x30
+
+
+
+    mov     x14, x20         // framebuffer base
+    movz    w15, 0xE0E0, lsl 0
+    movk    w15, 0x00E0, lsl 16   // rojo: 0x00FF0000
+
+    bl      draw_circle
+    
+    mov x22, x13
+    lsr x22, x22, #1
+    add x11, x11, x22
+
+    bl      draw_circle
+
+    mov x23, x12
+    lsr x12,x12,1
+    add x12, x12, x23
+
+    mov x22, x13
+    lsr x22, x22, #1
+    add x11, x11, x22
+
+    bl      draw_circle
+
+
+    br x29
+    
+
+
