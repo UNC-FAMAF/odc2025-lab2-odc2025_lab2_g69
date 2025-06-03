@@ -315,7 +315,7 @@ loop_x_tri :
     add     x24, x24, x22      // + x_actual
     lsl     x24, x24, 2        // * 4 (bytes por pixel)
 
-    // Escribir pixel
+    // Calculo el offset
     str     w15, [x14, x24]    // framebuffer[offset] = color
     mov     x24, x19           // y_actual
     add     x24, x24, 1
