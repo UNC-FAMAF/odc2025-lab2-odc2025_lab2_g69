@@ -73,6 +73,20 @@ main:
 		
 
 		bl      draw_rectangle
+
+
+		//---------------------------------------------------------
+		// Dibujar triangulo verde
+		//---------------------------------------------------------
+        
+        mov     x11, #150         // x inicial
+		mov     x12, #200          // y inicial
+        mov     x13, #200           // altura
+        mov     x14, x20           // framebuffer base
+		movz    w15, 0x0000, lsl 0     // 0x0000FF00 
+		movk    w15, 0x00CC, lsl 16    // 0xFF00FF00 
+
+        bl draw_triangle
     //---------------------------------------------------------
     // Leer GPIO (opcional)
     //---------------------------------------------------------
@@ -81,6 +95,19 @@ main:
     ldr     w10, [x9, GPIO_GPLEV0]
     and     w11, w10, 0b10
     lsr     w11, w11, 1
+
+
+    //---------------------------------------------------------
+    // Dibujar círculo amarillo
+    //---------------------------------------------------------
+    mov     x11, #320        // centro x
+    mov     x12, #240        // centro y
+    mov     x13, #50         // radio
+    mov     x14, x20         // framebuffer base
+    movz    w15, 0xFF00, lsl 0
+    movk    w15, 0x00FF, lsl 16   // rojo: 0x00FF0000
+
+    bl      draw_circle
 
 InfLoop:
     b       InfLoop
@@ -194,4 +221,124 @@ loop_x_rec:
     subs    x17, x17, 1
     b.ne    loop_y_rec
 
+    ret
+
+//---------------------------------------------------------
+// Subrutina: draw_circle
+//---------------------------------------------------------
+// Entradas:
+// x11 = centro_x
+// x12 = centro_y
+// x13 = radio
+// x14 = framebuffer base
+// x15 = color
+//---------------------------------------------------------
+
+draw_circle:
+    // Guardar registros
+    stp x19, x20, [sp, #-16]!
+
+    // r² = x13 * x13
+    mul x16, x13, x13        // x16 = radio²
+
+    mov x17, #0              // y = 0
+.loop_y_circle:
+    cmp x17, SCREEN_HEIGH
+    bge .end_circle
+
+    mov x18, #0              // x = 0
+.loop_x_circle:
+    cmp x18, SCREEN_WIDTH
+    bge .next_row_circle
+
+    // dx = x - centro_x
+    sub x19, x18, x11
+    // dy = y - centro_y
+    sub x20, x17, x12
+    // dx² + dy²
+    mul x21, x19, x19
+    mul x22, x20, x20
+    add x23, x21, x22
+    cmp x23, x16
+    bgt .skip_pixel_circle
+
+    // offset = (y * SCREEN_WIDTH + x) * 4
+    mov x24, x17
+    mov x20, SCREEN_WIDTH
+    mul x24, x24, x20
+    add x24, x24, x18
+    lsl x24, x24, 2
+
+    str w15, [x14, x24]
+
+.skip_pixel_circle:
+    add x18, x18, #1
+    b .loop_x_circle
+
+.next_row_circle:
+    add x17, x17, #1
+    b .loop_y_circle
+
+.end_circle:
+    ldp x19, x20, [sp], #16
+    ret
+
+//---------------------------------------------------------
+// Subrutina: draw_triangle
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = altura
+// x14 = framebuffer base
+// x15 = color
+//---------------------------------------------------------
+
+draw_triangle :
+
+    mov x16, x12  //variable que recorre de arriba hacia abajo y
+    mov x17, x11  //inicio del triangulo en x
+    mov x18, x11 //final del triangulo en x
+    
+
+loop_y_tri :
+    //inicia con la parte superior del triangulo
+    mov x19, x16 //variable que va a pintar los pixeles, coordenada y
+    mov x22, x17 //variable que ca a pintar los pixeles, coordenada x
+
+loop_x_tri :
+    //inicia el recorrido de inzquierda a derecha
+    // Calcular offset
+    mov     x24, x19           // y_actual
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x22      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+
+    // Escribir pixel
+    str     w15, [x14, x24]    // framebuffer[offset] = color
+    mov     x24, x19           // y_actual
+    add     x24, x24, 1
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x22      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+
+    // Escribir pixel
+    str     w15, [x14, x24]    // framebuffer[offset] = color
+
+    // Incrementar x_actual y continuar
+    
+    cmp x22, x18 //ver si ya llegue al final del triangulo en x
+    add     x22, x22, 1
+    b.ne    loop_x_tri
+
+    //bajar a la fila de abajo
+    add x16, x16, 2
+    sub x17, x17, 1 //inicio triangulo un pixel menos
+    add x18, x18, 1 //final triangulo un pixel mas
+    sub x21, x16, x13
+    cmp x21, x12
+    b.ne loop_y_tri
+    
     ret
