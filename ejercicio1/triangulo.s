@@ -213,7 +213,7 @@ draw_triangle :
 loop_y_tri :
     //inicia con la parte superior del triangulo
     mov x19, x16 //variable que va a pintar los pixeles, coordenada y
-    mov x20, x17 //variable que ca a pintar los pixeles, coordenada x
+    mov x22, x17 //variable que ca a pintar los pixeles, coordenada x
 
 loop_x_tri :
     //inicia el recorrido de inzquierda a derecha
@@ -221,19 +221,30 @@ loop_x_tri :
     mov     x24, x19           // y_actual
     mov     x23, SCREEN_WIDTH
     mul     x24, x24, x23      // y * SCREEN_WIDTH
-    add     x24, x24, x20      // + x_actual
+    add     x24, x24, x22      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+
+    // Escribir pixel
+    str     w15, [x14, x24]    // framebuffer[offset] = color
+
+    // Calcular offset
+    mov     x24, x19           // y_actual
+    add x24, x24, 1
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x22      // + x_actual
     lsl     x24, x24, 2        // * 4 (bytes por pixel)
 
     // Escribir pixel
     str     w15, [x14, x24]    // framebuffer[offset] = color
 
     // Incrementar x_actual y continuar
-    add     x20, x20, 1
-    cmp x20, x18 //ver si ya llegue al final del triangulo en x
-    b.ne    loop_x_rec
+    cmp x22, x18 //ver si ya llegue al final del triangulo en x
+    add     x22, x22, 1
+    b.ne    loop_x_tri
 
     //bajar a la fila de abajo
-    add x16, x16, 1
+    add x16, x16, 2
     sub x17, x17, 1 //inicio triangulo un pixel menos
     add x18, x18, 1 //final triangulo un pixel mas
     sub x21, x16, x13
