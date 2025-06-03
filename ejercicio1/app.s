@@ -6,7 +6,7 @@
     .equ GPIO_GPFSEL0,      0x00
     .equ GPIO_GPLEV0,       0x34
 
-    .global main
+    .globl main
     .global draw_square
 	.global draw_rectangle
 
@@ -60,8 +60,8 @@ main:
 		bl      draw_rectangle
 
 //---------------------------------------------------------
-		// Dibujar rectangulo marron (tronco)
-		//---------------------------------------------------------
+// Dibujar rectangulo marron (tronco)
+//---------------------------------------------------------
 		mov     x11, #50         // x inicial
 		mov     x12, #350      // y inicial
 		mov     x13, #20   // ancho (vertical)
@@ -75,9 +75,9 @@ main:
 		bl      draw_rectangle
 
 
-		//---------------------------------------------------------
-		// Dibujar triangulo verde
-		//---------------------------------------------------------
+//---------------------------------------------------------
+// Dibujar triangulo verde
+//---------------------------------------------------------
         
         mov     x11, #150         // x inicial
 		mov     x12, #200          // y inicial
@@ -87,6 +87,32 @@ main:
 		movk    w15, 0x00CC, lsl 16    // 0xFF00FF00 
 
         bl draw_triangle
+
+      
+    //---------------------------------------------------------
+    // Dibujar círculo amarillo
+    //---------------------------------------------------------
+    mov     x11, #400        // centro x
+    mov     x12, #30        // centro y
+    mov     x13, #50         // radio
+    mov     x14, x20         // framebuffer base
+    movz    w15, 0xFF00, lsl 0
+    movk    w15, 0x00FF, lsl 16   // rojo: 0x00FF0000
+
+
+    bl      draw_circle
+
+
+    
+        //---------------------------------------------------------
+		// Dibujar arbol de frente
+		//---------------------------------------------------------
+		mov     x11, #50         // x inicial
+		mov     x12, #100       // y inicial
+        mov     x13, #100       // tamaño
+
+        bl draw_tree
+    
     //---------------------------------------------------------
     // Leer GPIO (opcional)
     //---------------------------------------------------------
@@ -96,29 +122,6 @@ main:
     and     w11, w10, 0b10
     lsr     w11, w11, 1
 
-
-    //---------------------------------------------------------
-    // Dibujar círculo amarillo
-    //---------------------------------------------------------
-    mov     x11, #320        // centro x
-    mov     x12, #240        // centro y
-    mov     x13, #50         // radio
-    mov     x14, x20         // framebuffer base
-    movz    w15, 0x9900, lsl 0
-    movk    w15, 0x0099, lsl 16   
-
-    bl      draw_circle
-
-
-
-    //---------------------------------------------------------
-    // Dibujar nube
-    //---------------------------------------------------------
-    mov     x11, #320        // centro x
-    mov     x12, #240        // centro y
-    mov     x13, #10         // radio
-
-    bl draw_claud
 
 
 
@@ -355,6 +358,50 @@ loop_x_tri :
     b.ne loop_y_tri
     
     ret
+
+//---------------------------------------------------------
+// Subrutina: draw_tree
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = tamaño
+//---------------------------------------------------------
+
+draw_tree :
+    //guardo direccion para poder saltar a cualquier forma
+    mov x29, x30
+    //guardo datos del arbol para reestablecer luego
+    mov x28, x11
+    mov x27, x12
+    //Primer triangulo
+    mov     x14, x20           // framebuffer base
+	movz    w15, 0x8F39, lsl 0     // verde
+	movk    w15, 0x0000, lsl 16    // verde
+    bl draw_triangle
+    lsr x25, x13, #1 //mitad del tamaño del triangulo
+    add x12, x12, x25 //proximo triangulo se crea en el medio del triangulo anterior
+    bl draw_triangle
+    add x12, x12, x25 //proximo triangulo se crea en el medio del triangulo anterior
+    bl draw_triangle
+    //Tronco
+    add x12, x12, x13 //el rectangulo comienza en la base del ultimo triangulo
+    mov x14, x25 //tamaño del tronco
+    lsr x13, x25, #1 //un cuarto del tamaño, para un tronco fino
+    lsr x25, x25, #2 // un octavo del tronco, me servira para centrarlo luego
+    sub x11, x11, x25 // con esto el tronco quedará centrado
+    mov x15, x20 //framebuffer base
+    movz    w16, 0x3621, lsl 0     // marron
+	movk    w16, 0x004B, lsl 16    // marron
+    bl draw_rectangle
+    //Reestablezco las variables anteriores
+    mov x30, x29
+    mov x11, x28
+    mov x12, x27
+
+    ret
+    
+
 
 draw_claud: 
     // x11 posicion en x
