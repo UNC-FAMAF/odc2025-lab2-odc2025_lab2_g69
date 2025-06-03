@@ -229,7 +229,7 @@ loop_x_tri :
 
     // Incrementar x_actual y continuar
     add     x20, x20, 1
-    subs    x31, x20, x18 //ver si ya llegue al final del triangulo en x
+    cmp x20, x18 //ver si ya llegue al final del triangulo en x
     b.ne    loop_x_rec
 
     //bajar a la fila de abajo
@@ -237,7 +237,7 @@ loop_x_tri :
     sub x17, x17, 1 //inicio triangulo un pixel menos
     add x18, x18, 1 //final triangulo un pixel mas
     sub x21, x16, x13
-    subs x31, x21, x12
+    cmp x21, x12
     b.ne loop_y_tri
     
     ret
