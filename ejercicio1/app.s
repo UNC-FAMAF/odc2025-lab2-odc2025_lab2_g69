@@ -15,10 +15,11 @@ main:
     mov     x20, x0           // Guardar copia en x20
 
     //---------------------------------------------------------
-    // Pintar fondo de color rosa (0x00C71585)
+    // Pintar fondo de color verde (0x00C71585)
     //---------------------------------------------------------
-    movz    w10, 0xC7, lsl 16
-    movk    w10, 0x1585, lsl 0
+		
+		movz    w10, 0x9900, lsl 00  // 0xFF00FF00 
+    
 
     mov     x2, SCREEN_HEIGH     // contador de filas
 	loop1:
@@ -44,21 +45,34 @@ main:
 		bl      draw_square
 
 		//---------------------------------------------------------
-		// Dibujar rectangulo verde
+		// Dibujar rectangulo azul
 		//---------------------------------------------------------
-		mov     x11, #300          // x inicial
-		mov     x12, #200          // y inicial
-		mov     x13, #20           // ancho (vertical)
-		mov     x14, #90           // alto (horizontal)
+		mov     x11, #0          // x inicial
+		mov     x12, #0        // y inicial
+		mov     x13, #640         // ancho (vertical)
+		mov     x14, #240        // alto (horizontal)
 		mov     x15, x20           // framebuffer base
-		movz    w16, 0xFF00, lsl 0     // 0x0000FF00 
+		movz    w16, 0x0099, lsl 0     // 0x0000FF00 
 		movk    w16, 0xFF00, lsl 16    // 0xFF00FF00 
 
 		
 
 		bl      draw_rectangle
 
+//---------------------------------------------------------
+		// Dibujar rectangulo marron (tronco)
+		//---------------------------------------------------------
+		mov     x11, #50         // x inicial
+		mov     x12, #350      // y inicial
+		mov     x13, #20   // ancho (vertical)
+		mov     x14, #90       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0x3300, lsl 0     // 0x0000FF00 
+		movk    w16, 0xFF66, lsl 16    // 0xFF00FF00 
 
+		
+
+		bl      draw_rectangle
     //---------------------------------------------------------
     // Leer GPIO (opcional)
     //---------------------------------------------------------
@@ -112,14 +126,14 @@ draw_square:
 
 .loop_x_sq:
     // Calcular offset en memoria: offset = (y_actual * SCREEN_WIDTH + x_actual) * 4
-    mov     x20, x17            // x20 = y_actual
+    mov     x22, x17            // x22 = y_actual
     mov     x21, SCREEN_WIDTH   // x21 = SCREEN_WIDTH
-    mul     x20, x20, x21       // x20 = y_actual * SCREEN_WIDTH
-    add     x20, x20, x19       // x20 = y_actual * SCREEN_WIDTH + x_actual
-    lsl     x20, x20, 2         // x20 = offset en bytes (4 bytes por píxel)
+    mul     x22, x22, x21       // x22 = y_actual * SCREEN_WIDTH
+    add     x22, x22, x19       // x22 = y_actual * SCREEN_WIDTH + x_actual
+    lsl     x22, x22, 2         // x22 = offset en bytes (4 bytes por píxel)
 
     // Escribir color en framebuffer[offset]
-    str     w15, [x14, x20]     // framebuffer[offset] = color
+    str     w15, [x14, x22]     // framebuffer[offset] = color
 
     // Incrementar columna actual y decrementar contador horizontal
     add     x19, x19, 1         // x_actual++
