@@ -52,41 +52,29 @@ main:
 		mov     x13, #640         // ancho (vertical)
 		mov     x14, #240        // alto (horizontal)
 		mov     x15, x20           // framebuffer base
-		movz    w16, 0x0099, lsl 0     // 0x0000FF00 
-		movk    w16, 0xFF00, lsl 16    // 0xFF00FF00 
-
+		movz    w16, 0x80FF, lsl 0     // 0x0000FF00 
 		
-
-		bl      draw_rectangle
-
-//---------------------------------------------------------
-// Dibujar rectangulo marron (tronco)
-//---------------------------------------------------------
-		mov     x11, #50         // x inicial
-		mov     x12, #350      // y inicial
-		mov     x13, #20   // ancho (vertical)
-		mov     x14, #90       // alto (horizontal)
-		mov     x15, x20           // framebuffer base
-		movz    w16, 0x3300, lsl 0     // 0x0000FF00 
-		movk    w16, 0xFF66, lsl 16    // 0xFF00FF00 
 
 		
 
 		bl      draw_rectangle
 
 
-//---------------------------------------------------------
-// Dibujar triangulo verde
-//---------------------------------------------------------
-        
-        mov     x11, #150         // x inicial
-		mov     x12, #200          // y inicial
-        mov     x13, #200           // altura
-        mov     x14, x20           // framebuffer base
-		movz    w15, 0x0000, lsl 0     // 0x0000FF00 
-		movk    w15, 0x00CC, lsl 16    // 0xFF00FF00 
 
-        bl draw_triangle
+
+
+//---------------------------------------------------------
+// Dibujar triangulo rojo
+//---------------------------------------------------------
+//        
+  //      mov     x11, #150         // x inicial
+//		mov     x12, #200          // y inicial
+//        mov     x13, #200           // altura
+//        mov     x14, x20           // framebuffer base
+//		movz    w15, 0x0000, lsl 0     // 0x0000FF00 
+//		movk    w15, 0x00CC, lsl 16    // 0xFF00FF00 
+//
+  //      bl draw_triangle
 
       
     //---------------------------------------------------------
@@ -96,12 +84,24 @@ main:
     mov     x12, #30        // centro y
     mov     x13, #50         // radio
     mov     x14, x20         // framebuffer base
-    movz    w15, 0xFF00, lsl 0
+    movz    w15, 0xFF66, lsl 0
     movk    w15, 0x00FF, lsl 16   // rojo: 0x00FF0000
 
 
     bl      draw_circle
 
+
+
+        //---------------------------------------------------------
+		// Dibujar arbol de frente
+		//---------------------------------------------------------
+		mov     x11, #400         // x inicial
+		mov     x12, #255  // y inicial
+        mov     x13, #20      // tamaño
+        movz    w15, 0x6633, lsl 0
+        
+        bl draw_tree
+    //-------------------
 
     
         //---------------------------------------------------------
@@ -110,9 +110,45 @@ main:
 		mov     x11, #50         // x inicial
 		mov     x12, #100       // y inicial
         mov     x13, #100       // tamaño
-
+        movz    w15, 0x9900, lsl 0
+        
         bl draw_tree
-    
+
+
+
+
+        //---------------------------------------------------------
+		// Dibujar arbol de frente
+		//---------------------------------------------------------
+		mov     x11, #150         // x inicial
+		mov     x12, #220      // y inicial
+        mov     x13, #50       // tamaño
+        movz    w15, 0x6600, lsl 0
+        
+        bl draw_tree
+
+
+
+
+        //---------------------------------------------------------
+		// Dibujar arbol de frente
+		//---------------------------------------------------------
+		mov     x11, #260         // x inicial
+		mov     x12, #220      // y inicial
+        mov     x13, #50       // tamaño
+        movz    w15, 0x3300, lsl 0
+        
+        bl draw_tree
+    //---------------------------------------------------------
+    // Dibujar nube
+    //---------------------------------------------------------
+        mov     x11, #400        // centro x
+        mov     x12, #30        // centro y
+        mov     x13, #10         // radio
+
+        bl draw_claud
+
+
     //---------------------------------------------------------
     // Leer GPIO (opcional)
     //---------------------------------------------------------
@@ -376,8 +412,7 @@ draw_tree :
     mov x27, x12
     //Primer triangulo
     mov     x14, x20           // framebuffer base
-	movz    w15, 0x8F39, lsl 0     // verde
-	movk    w15, 0x0000, lsl 16    // verde
+
     bl draw_triangle
     lsr x25, x13, #1 //mitad del tamaño del triangulo
     add x12, x12, x25 //proximo triangulo se crea en el medio del triangulo anterior
@@ -408,6 +443,7 @@ draw_claud:
     // x12 posicion en y
     // x13 radio
 
+// por pereza esto dibuja circulos en forma de nube
 
     mov x29, x30
 
@@ -421,19 +457,88 @@ draw_claud:
     
     mov x22, x13
     lsr x22, x22, #1
-    add x11, x11, x22
+    sub x11, x11, x22
 
     bl      draw_circle
-
-    mov x23, x12
-    lsr x12,x12,1
-    add x12, x12, x23
 
     mov x22, x13
     lsr x22, x22, #1
+    sub x11, x11, x22
+
+    bl      draw_circle
+
+    mov x22, x13
+    lsr x22, x22, #1
+    sub x11, x11, x22
+
+    bl      draw_circle
+    mov x22, x13
+    lsr x22, x22, #1
+    sub x11, x11, x22
+
+    bl      draw_circle
+
+
+
+
+
+    mov x23, x12
+    lsr x23,x23,1
+    add x12, x12, x23
+
+    mov x22, x13
+    lsr x22, x22, #2
     add x11, x11, x22
 
     bl      draw_circle
+   
+    mov x22, x13
+    lsr x22, x22, #1
+
+    add x11, x11, x22
+
+
+    bl      draw_circle
+
+    mov x22, x13
+    lsr x22, x22, #1
+
+    add x11, x11, x22
+
+
+    bl      draw_circle
+        mov x22, x13
+    lsr x22, x22, #1
+
+    add x11, x11, x22
+
+
+    bl      draw_circle
+
+    mov x22, x13
+    lsr x22, x22, #1
+
+    add x11, x11, x22
+
+
+    bl      draw_circle
+
+    mov x22, x13
+    lsr x22, x22, #1
+
+    add x11, x11, x22
+
+
+    bl      draw_circle
+
+
+
+
+
+
+
+
+
 
 
     br x29
