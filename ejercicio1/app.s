@@ -9,6 +9,13 @@
     .globl main
     .global draw_square
 	.global draw_rectangle
+<<<<<<< Updated upstream
+=======
+    .global draw_circle
+    .global draw_triangle
+
+    .extern draw_sonic
+>>>>>>> Stashed changes
 
 main:
     // x0 contiene la dirección base del framebuffer
@@ -97,6 +104,31 @@ main:
 
         bl draw_tree
 
+<<<<<<< Updated upstream
+=======
+		//---------------------------------------------------------
+		// Dibujar rectangulo temporal
+		//---------------------------------------------------------
+		mov     x11, #230          // x inicial
+		mov     x12, #300        // y inicial
+		mov     x13, #100         // ancho (vertical)
+		mov     x14, #150        // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE3FF, lsl 0     // 0x00000099 
+		movk    w16, 0x0033, lsl 16    // 0xFF000099 
+
+        bl draw_rectangle
+
+        //---------------------------------------------------------
+		// Dibujar sonic
+		//---------------------------------------------------------
+		mov     x11, #230          // x inicial
+		mov     x12, #300        // y inicial
+		mov     x13, x20           // framebuffer base
+
+        bl draw_sonic
+
+>>>>>>> Stashed changes
     //---------------------------------------------------------
     // Leer GPIO (opcional)
     //---------------------------------------------------------
@@ -394,4 +426,7 @@ draw_tree :
     mov x12, x27
 
     ret
+<<<<<<< Updated upstream
     
+=======
+>>>>>>> Stashed changes
