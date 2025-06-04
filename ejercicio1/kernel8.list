@@ -16451,7 +16451,7 @@ Desensamblado de la sección .text:
 	...
    900a0:	00080000 	.inst	0x00080000 ; undefined
    900a4:	00000000 	udf	#0
-   900a8:	00110440 	.inst	0x00110440 ; undefined
+   900a8:	001103e0 	.inst	0x001103e0 ; undefined
    900ac:	00000000 	udf	#0
    900b0:	00090008 	.inst	0x00090008 ; undefined
    900b4:	00000000 	udf	#0
@@ -16481,260 +16481,246 @@ Desensamblado de la sección .text:
    900fc:	aa1403ee 	mov	x14, x20
    90100:	529fe00f 	mov	w15, #0xff00                	// #65280
    90104:	72a01fef 	movk	w15, #0xff, lsl #16
-   90108:	9400002d 	bl	901bc <draw_square>
+   90108:	94000037 	bl	901e4 <draw_square>
    9010c:	d280000b 	mov	x11, #0x0                   	// #0
    90110:	d280000c 	mov	x12, #0x0                   	// #0
    90114:	d280500d 	mov	x13, #0x280                 	// #640
    90118:	d2801e0e 	mov	x14, #0xf0                  	// #240
    9011c:	aa1403ef 	mov	x15, x20
    90120:	52901ff0 	mov	w16, #0x80ff                	// #33023
-   90124:	94000037 	bl	90200 <draw_rectangle>
+   90124:	94000041 	bl	90228 <draw_rectangle>
    90128:	d280320b 	mov	x11, #0x190                 	// #400
    9012c:	d28003cc 	mov	x12, #0x1e                  	// #30
    90130:	d280064d 	mov	x13, #0x32                  	// #50
    90134:	aa1403ee 	mov	x14, x20
    90138:	529feccf 	mov	w15, #0xff66                	// #65382
    9013c:	72a01fef 	movk	w15, #0xff, lsl #16
-   90140:	94000041 	bl	90244 <draw_circle>
-   90144:	d280320b 	mov	x11, #0x190                 	// #400
-   90148:	d2801fec 	mov	x12, #0xff                  	// #255
-   9014c:	d280028d 	mov	x13, #0x14                  	// #20
-   90150:	528cc66f 	mov	w15, #0x6633                	// #26163
-   90154:	94000073 	bl	90320 <draw_tree>
-   90158:	d280064b 	mov	x11, #0x32                  	// #50
-   9015c:	d2800c8c 	mov	x12, #0x64                  	// #100
-   90160:	d2800c8d 	mov	x13, #0x64                  	// #100
-   90164:	5293200f 	mov	w15, #0x9900                	// #39168
-   90168:	9400006e 	bl	90320 <draw_tree>
-   9016c:	d28012cb 	mov	x11, #0x96                  	// #150
-   90170:	d2801b8c 	mov	x12, #0xdc                  	// #220
-   90174:	d280064d 	mov	x13, #0x32                  	// #50
-   90178:	528cc00f 	mov	w15, #0x6600                	// #26112
-   9017c:	94000069 	bl	90320 <draw_tree>
-   90180:	d280208b 	mov	x11, #0x104                 	// #260
-   90184:	d2801b8c 	mov	x12, #0xdc                  	// #220
+   90140:	9400004b 	bl	9026c <draw_circle>
+   90144:	d2a7e409 	mov	x9, #0x3f200000            	// #1059061760
+   90148:	b900013f 	str	wzr, [x9]
+   9014c:	b940352a 	ldr	w10, [x9, #52]
+   90150:	121f014b 	and	w11, w10, #0x2
+   90154:	53017d6b 	lsr	w11, w11, #1
+   90158:	d280003c 	mov	x28, #0x1                   	// #1
+
+000000000009015c <InfLoop>:
+   9015c:	f10a039f 	cmp	x28, #0x280
+   90160:	9a9cc3fc 	csel	x28, xzr, x28, gt
+   90164:	d280000b 	mov	x11, #0x0                   	// #0
+   90168:	d280000c 	mov	x12, #0x0                   	// #0
+   9016c:	d280500d 	mov	x13, #0x280                 	// #640
+   90170:	d2801e0e 	mov	x14, #0xf0                  	// #240
+   90174:	aa1403ef 	mov	x15, x20
+   90178:	52901ff0 	mov	w16, #0x80ff                	// #33023
+   9017c:	9400002b 	bl	90228 <draw_rectangle>
+   90180:	d280320b 	mov	x11, #0x190                 	// #400
+   90184:	d28003cc 	mov	x12, #0x1e                  	// #30
    90188:	d280064d 	mov	x13, #0x32                  	// #50
-   9018c:	5286600f 	mov	w15, #0x3300                	// #13056
-   90190:	94000064 	bl	90320 <draw_tree>
-   90194:	d280320b 	mov	x11, #0x190                 	// #400
-   90198:	d28003cc 	mov	x12, #0x1e                  	// #30
-   9019c:	d280014d 	mov	x13, #0xa                   	// #10
-   901a0:	94000077 	bl	9037c <draw_claud>
-   901a4:	d2a7e409 	mov	x9, #0x3f200000            	// #1059061760
-   901a8:	b900013f 	str	wzr, [x9]
-   901ac:	b940352a 	ldr	w10, [x9, #52]
-   901b0:	121f014b 	and	w11, w10, #0x2
-   901b4:	53017d6b 	lsr	w11, w11, #1
+   9018c:	aa1403ee 	mov	x14, x20
+   90190:	529feccf 	mov	w15, #0xff66                	// #65382
+   90194:	72a01fef 	movk	w15, #0xff, lsl #16
+   90198:	94000035 	bl	9026c <draw_circle>
+   9019c:	aa1c03eb 	mov	x11, x28
+   901a0:	d28003cc 	mov	x12, #0x1e                  	// #30
+   901a4:	d280028d 	mov	x13, #0x14                  	// #20
+   901a8:	d280050e 	mov	x14, #0x28                  	// #40
+   901ac:	aa1403ef 	mov	x15, x20
+   901b0:	529c1c10 	mov	w16, #0xe0e0                	// #57568
+   901b4:	72a01c10 	movk	w16, #0xe0, lsl #16
+   901b8:	9400001c 	bl	90228 <draw_rectangle>
+   901bc:	d284e218 	mov	x24, #0x2710                	// #10000
+   901c0:	9400007e 	bl	903b8 <waste_time_2>
+   901c4:	d284e218 	mov	x24, #0x2710                	// #10000
+   901c8:	9400007c 	bl	903b8 <waste_time_2>
+   901cc:	d284e218 	mov	x24, #0x2710                	// #10000
+   901d0:	9400007a 	bl	903b8 <waste_time_2>
+   901d4:	d284e218 	mov	x24, #0x2710                	// #10000
+   901d8:	94000078 	bl	903b8 <waste_time_2>
+   901dc:	9100079c 	add	x28, x28, #0x1
+   901e0:	17ffffdf 	b	9015c <InfLoop>
 
-00000000000901b8 <InfLoop>:
-   901b8:	14000000 	b	901b8 <InfLoop>
+00000000000901e4 <draw_square>:
+   901e4:	aa0d03f0 	mov	x16, x13
+   901e8:	aa0c03f1 	mov	x17, x12
 
-00000000000901bc <draw_square>:
-   901bc:	aa0d03f0 	mov	x16, x13
-   901c0:	aa0c03f1 	mov	x17, x12
+00000000000901ec <.loop_y_sq>:
+   901ec:	aa0d03f2 	mov	x18, x13
+   901f0:	aa0b03f3 	mov	x19, x11
 
-00000000000901c4 <.loop_y_sq>:
-   901c4:	aa0d03f2 	mov	x18, x13
-   901c8:	aa0b03f3 	mov	x19, x11
+00000000000901f4 <.loop_x_sq>:
+   901f4:	aa1103f6 	mov	x22, x17
+   901f8:	d2805015 	mov	x21, #0x280                 	// #640
+   901fc:	9b157ed6 	mul	x22, x22, x21
+   90200:	8b1302d6 	add	x22, x22, x19
+   90204:	d37ef6d6 	lsl	x22, x22, #2
+   90208:	b83669cf 	str	w15, [x14, x22]
+   9020c:	91000673 	add	x19, x19, #0x1
+   90210:	f1000652 	subs	x18, x18, #0x1
+   90214:	54ffff01 	b.ne	901f4 <.loop_x_sq>  // b.any
+   90218:	91000631 	add	x17, x17, #0x1
+   9021c:	f1000610 	subs	x16, x16, #0x1
+   90220:	54fffe61 	b.ne	901ec <.loop_y_sq>  // b.any
+   90224:	d65f03c0 	ret
 
-00000000000901cc <.loop_x_sq>:
-   901cc:	aa1103f6 	mov	x22, x17
-   901d0:	d2805015 	mov	x21, #0x280                 	// #640
-   901d4:	9b157ed6 	mul	x22, x22, x21
-   901d8:	8b1302d6 	add	x22, x22, x19
-   901dc:	d37ef6d6 	lsl	x22, x22, #2
-   901e0:	b83669cf 	str	w15, [x14, x22]
-   901e4:	91000673 	add	x19, x19, #0x1
-   901e8:	f1000652 	subs	x18, x18, #0x1
-   901ec:	54ffff01 	b.ne	901cc <.loop_x_sq>  // b.any
-   901f0:	91000631 	add	x17, x17, #0x1
-   901f4:	f1000610 	subs	x16, x16, #0x1
-   901f8:	54fffe61 	b.ne	901c4 <.loop_y_sq>  // b.any
-   901fc:	d65f03c0 	ret
+0000000000090228 <draw_rectangle>:
+   90228:	aa0e03f1 	mov	x17, x14
+   9022c:	aa0c03f2 	mov	x18, x12
 
-0000000000090200 <draw_rectangle>:
-   90200:	aa0e03f1 	mov	x17, x14
-   90204:	aa0c03f2 	mov	x18, x12
+0000000000090230 <loop_y_rec>:
+   90230:	aa0d03f3 	mov	x19, x13
+   90234:	aa0b03f5 	mov	x21, x11
 
-0000000000090208 <loop_y_rec>:
-   90208:	aa0d03f3 	mov	x19, x13
-   9020c:	aa0b03f5 	mov	x21, x11
+0000000000090238 <loop_x_rec>:
+   90238:	aa1203f8 	mov	x24, x18
+   9023c:	d2805017 	mov	x23, #0x280                 	// #640
+   90240:	9b177f18 	mul	x24, x24, x23
+   90244:	8b150318 	add	x24, x24, x21
+   90248:	d37ef718 	lsl	x24, x24, #2
+   9024c:	b83869f0 	str	w16, [x15, x24]
+   90250:	910006b5 	add	x21, x21, #0x1
+   90254:	f1000673 	subs	x19, x19, #0x1
+   90258:	54ffff01 	b.ne	90238 <loop_x_rec>  // b.any
+   9025c:	91000652 	add	x18, x18, #0x1
+   90260:	f1000631 	subs	x17, x17, #0x1
+   90264:	54fffe61 	b.ne	90230 <loop_y_rec>  // b.any
+   90268:	d65f03c0 	ret
 
-0000000000090210 <loop_x_rec>:
-   90210:	aa1203f8 	mov	x24, x18
-   90214:	d2805017 	mov	x23, #0x280                 	// #640
-   90218:	9b177f18 	mul	x24, x24, x23
-   9021c:	8b150318 	add	x24, x24, x21
-   90220:	d37ef718 	lsl	x24, x24, #2
-   90224:	b83869f0 	str	w16, [x15, x24]
-   90228:	910006b5 	add	x21, x21, #0x1
-   9022c:	f1000673 	subs	x19, x19, #0x1
-   90230:	54ffff01 	b.ne	90210 <loop_x_rec>  // b.any
-   90234:	91000652 	add	x18, x18, #0x1
-   90238:	f1000631 	subs	x17, x17, #0x1
-   9023c:	54fffe61 	b.ne	90208 <loop_y_rec>  // b.any
-   90240:	d65f03c0 	ret
+000000000009026c <draw_circle>:
+   9026c:	a9bf53f3 	stp	x19, x20, [sp, #-16]!
+   90270:	9b0d7db0 	mul	x16, x13, x13
+   90274:	d2800011 	mov	x17, #0x0                   	// #0
 
-0000000000090244 <draw_circle>:
-   90244:	a9bf53f3 	stp	x19, x20, [sp, #-16]!
-   90248:	9b0d7db0 	mul	x16, x13, x13
-   9024c:	d2800011 	mov	x17, #0x0                   	// #0
+0000000000090278 <.loop_y_circle>:
+   90278:	f107823f 	cmp	x17, #0x1e0
+   9027c:	540002aa 	b.ge	902d0 <.end_circle>  // b.tcont
+   90280:	d2800012 	mov	x18, #0x0                   	// #0
 
-0000000000090250 <.loop_y_circle>:
-   90250:	f107823f 	cmp	x17, #0x1e0
-   90254:	540002aa 	b.ge	902a8 <.end_circle>  // b.tcont
-   90258:	d2800012 	mov	x18, #0x0                   	// #0
+0000000000090284 <.loop_x_circle>:
+   90284:	f10a025f 	cmp	x18, #0x280
+   90288:	5400020a 	b.ge	902c8 <.next_row_circle>  // b.tcont
+   9028c:	cb0b0253 	sub	x19, x18, x11
+   90290:	cb0c0234 	sub	x20, x17, x12
+   90294:	9b137e75 	mul	x21, x19, x19
+   90298:	9b147e96 	mul	x22, x20, x20
+   9029c:	8b1602b7 	add	x23, x21, x22
+   902a0:	eb1002ff 	cmp	x23, x16
+   902a4:	540000ec 	b.gt	902c0 <.skip_pixel_circle>
+   902a8:	aa1103f8 	mov	x24, x17
+   902ac:	d2805014 	mov	x20, #0x280                 	// #640
+   902b0:	9b147f18 	mul	x24, x24, x20
+   902b4:	8b120318 	add	x24, x24, x18
+   902b8:	d37ef718 	lsl	x24, x24, #2
+   902bc:	b83869cf 	str	w15, [x14, x24]
 
-000000000009025c <.loop_x_circle>:
-   9025c:	f10a025f 	cmp	x18, #0x280
-   90260:	5400020a 	b.ge	902a0 <.next_row_circle>  // b.tcont
-   90264:	cb0b0253 	sub	x19, x18, x11
-   90268:	cb0c0234 	sub	x20, x17, x12
-   9026c:	9b137e75 	mul	x21, x19, x19
-   90270:	9b147e96 	mul	x22, x20, x20
-   90274:	8b1602b7 	add	x23, x21, x22
-   90278:	eb1002ff 	cmp	x23, x16
-   9027c:	540000ec 	b.gt	90298 <.skip_pixel_circle>
-   90280:	aa1103f8 	mov	x24, x17
-   90284:	d2805014 	mov	x20, #0x280                 	// #640
-   90288:	9b147f18 	mul	x24, x24, x20
-   9028c:	8b120318 	add	x24, x24, x18
-   90290:	d37ef718 	lsl	x24, x24, #2
-   90294:	b83869cf 	str	w15, [x14, x24]
+00000000000902c0 <.skip_pixel_circle>:
+   902c0:	91000652 	add	x18, x18, #0x1
+   902c4:	17fffff0 	b	90284 <.loop_x_circle>
 
-0000000000090298 <.skip_pixel_circle>:
-   90298:	91000652 	add	x18, x18, #0x1
-   9029c:	17fffff0 	b	9025c <.loop_x_circle>
+00000000000902c8 <.next_row_circle>:
+   902c8:	91000631 	add	x17, x17, #0x1
+   902cc:	17ffffeb 	b	90278 <.loop_y_circle>
 
-00000000000902a0 <.next_row_circle>:
-   902a0:	91000631 	add	x17, x17, #0x1
-   902a4:	17ffffeb 	b	90250 <.loop_y_circle>
+00000000000902d0 <.end_circle>:
+   902d0:	a8c153f3 	ldp	x19, x20, [sp], #16
+   902d4:	d65f03c0 	ret
 
-00000000000902a8 <.end_circle>:
-   902a8:	a8c153f3 	ldp	x19, x20, [sp], #16
-   902ac:	d65f03c0 	ret
+00000000000902d8 <draw_triangle>:
+   902d8:	aa0c03f0 	mov	x16, x12
+   902dc:	aa0b03f1 	mov	x17, x11
+   902e0:	aa0b03f2 	mov	x18, x11
 
-00000000000902b0 <draw_triangle>:
-   902b0:	aa0c03f0 	mov	x16, x12
-   902b4:	aa0b03f1 	mov	x17, x11
-   902b8:	aa0b03f2 	mov	x18, x11
+00000000000902e4 <loop_y_tri>:
+   902e4:	aa1003f3 	mov	x19, x16
+   902e8:	aa1103f6 	mov	x22, x17
 
-00000000000902bc <loop_y_tri>:
-   902bc:	aa1003f3 	mov	x19, x16
-   902c0:	aa1103f6 	mov	x22, x17
+00000000000902ec <loop_x_tri>:
+   902ec:	aa1303f8 	mov	x24, x19
+   902f0:	d2805017 	mov	x23, #0x280                 	// #640
+   902f4:	9b177f18 	mul	x24, x24, x23
+   902f8:	8b160318 	add	x24, x24, x22
+   902fc:	d37ef718 	lsl	x24, x24, #2
+   90300:	b83869cf 	str	w15, [x14, x24]
+   90304:	aa1303f8 	mov	x24, x19
+   90308:	91000718 	add	x24, x24, #0x1
+   9030c:	d2805017 	mov	x23, #0x280                 	// #640
+   90310:	9b177f18 	mul	x24, x24, x23
+   90314:	8b160318 	add	x24, x24, x22
+   90318:	d37ef718 	lsl	x24, x24, #2
+   9031c:	b83869cf 	str	w15, [x14, x24]
+   90320:	eb1202df 	cmp	x22, x18
+   90324:	910006d6 	add	x22, x22, #0x1
+   90328:	54fffe21 	b.ne	902ec <loop_x_tri>  // b.any
+   9032c:	91000a10 	add	x16, x16, #0x2
+   90330:	d1000631 	sub	x17, x17, #0x1
+   90334:	91000652 	add	x18, x18, #0x1
+   90338:	cb0d0215 	sub	x21, x16, x13
+   9033c:	eb0c02bf 	cmp	x21, x12
+   90340:	54fffd21 	b.ne	902e4 <loop_y_tri>  // b.any
+   90344:	d65f03c0 	ret
 
-00000000000902c4 <loop_x_tri>:
-   902c4:	aa1303f8 	mov	x24, x19
-   902c8:	d2805017 	mov	x23, #0x280                 	// #640
-   902cc:	9b177f18 	mul	x24, x24, x23
-   902d0:	8b160318 	add	x24, x24, x22
-   902d4:	d37ef718 	lsl	x24, x24, #2
-   902d8:	b83869cf 	str	w15, [x14, x24]
-   902dc:	aa1303f8 	mov	x24, x19
-   902e0:	91000718 	add	x24, x24, #0x1
-   902e4:	d2805017 	mov	x23, #0x280                 	// #640
-   902e8:	9b177f18 	mul	x24, x24, x23
-   902ec:	8b160318 	add	x24, x24, x22
-   902f0:	d37ef718 	lsl	x24, x24, #2
-   902f4:	b83869cf 	str	w15, [x14, x24]
-   902f8:	eb1202df 	cmp	x22, x18
-   902fc:	910006d6 	add	x22, x22, #0x1
-   90300:	54fffe21 	b.ne	902c4 <loop_x_tri>  // b.any
-   90304:	91000a10 	add	x16, x16, #0x2
-   90308:	d1000631 	sub	x17, x17, #0x1
-   9030c:	91000652 	add	x18, x18, #0x1
-   90310:	cb0d0215 	sub	x21, x16, x13
-   90314:	eb0c02bf 	cmp	x21, x12
-   90318:	54fffd21 	b.ne	902bc <loop_y_tri>  // b.any
-   9031c:	d65f03c0 	ret
+0000000000090348 <draw_tree>:
+   90348:	aa1e03fd 	mov	x29, x30
+   9034c:	aa0b03fc 	mov	x28, x11
+   90350:	aa0c03fb 	mov	x27, x12
+   90354:	aa1403ee 	mov	x14, x20
+   90358:	97ffffe0 	bl	902d8 <draw_triangle>
+   9035c:	d341fdb9 	lsr	x25, x13, #1
+   90360:	8b19018c 	add	x12, x12, x25
+   90364:	97ffffdd 	bl	902d8 <draw_triangle>
+   90368:	8b19018c 	add	x12, x12, x25
+   9036c:	97ffffdb 	bl	902d8 <draw_triangle>
+   90370:	8b0d018c 	add	x12, x12, x13
+   90374:	aa1903ee 	mov	x14, x25
+   90378:	d341ff2d 	lsr	x13, x25, #1
+   9037c:	d342ff39 	lsr	x25, x25, #2
+   90380:	cb19016b 	sub	x11, x11, x25
+   90384:	aa1403ef 	mov	x15, x20
+   90388:	5286c430 	mov	w16, #0x3621                	// #13857
+   9038c:	72a00970 	movk	w16, #0x4b, lsl #16
+   90390:	97ffffa6 	bl	90228 <draw_rectangle>
+   90394:	aa1d03fe 	mov	x30, x29
+   90398:	aa1c03eb 	mov	x11, x28
+   9039c:	aa1b03ec 	mov	x12, x27
+   903a0:	d65f03c0 	ret
 
-0000000000090320 <draw_tree>:
-   90320:	aa1e03fd 	mov	x29, x30
-   90324:	aa0b03fc 	mov	x28, x11
-   90328:	aa0c03fb 	mov	x27, x12
-   9032c:	aa1403ee 	mov	x14, x20
-   90330:	97ffffe0 	bl	902b0 <draw_triangle>
-   90334:	d341fdb9 	lsr	x25, x13, #1
-   90338:	8b19018c 	add	x12, x12, x25
-   9033c:	97ffffdd 	bl	902b0 <draw_triangle>
-   90340:	8b19018c 	add	x12, x12, x25
-   90344:	97ffffdb 	bl	902b0 <draw_triangle>
-   90348:	8b0d018c 	add	x12, x12, x13
-   9034c:	aa1903ee 	mov	x14, x25
-   90350:	d341ff2d 	lsr	x13, x25, #1
-   90354:	d342ff39 	lsr	x25, x25, #2
-   90358:	cb19016b 	sub	x11, x11, x25
-   9035c:	aa1403ef 	mov	x15, x20
-   90360:	5286c430 	mov	w16, #0x3621                	// #13857
-   90364:	72a00970 	movk	w16, #0x4b, lsl #16
-   90368:	97ffffa6 	bl	90200 <draw_rectangle>
-   9036c:	aa1d03fe 	mov	x30, x29
-   90370:	aa1c03eb 	mov	x11, x28
-   90374:	aa1b03ec 	mov	x12, x27
-   90378:	d65f03c0 	ret
+00000000000903a4 <waste_time>:
+   903a4:	b4000097 	cbz	x23, 903b4 <.end_waste>
+   903a8:	aa1703e1 	mov	x1, x23
 
-000000000009037c <draw_claud>:
-   9037c:	aa1e03fd 	mov	x29, x30
-   90380:	aa1403ee 	mov	x14, x20
-   90384:	529c1c0f 	mov	w15, #0xe0e0                	// #57568
-   90388:	72a01c0f 	movk	w15, #0xe0, lsl #16
-   9038c:	97ffffae 	bl	90244 <draw_circle>
-   90390:	aa0d03f6 	mov	x22, x13
-   90394:	d341fed6 	lsr	x22, x22, #1
-   90398:	cb16016b 	sub	x11, x11, x22
-   9039c:	97ffffaa 	bl	90244 <draw_circle>
-   903a0:	aa0d03f6 	mov	x22, x13
-   903a4:	d341fed6 	lsr	x22, x22, #1
-   903a8:	cb16016b 	sub	x11, x11, x22
-   903ac:	97ffffa6 	bl	90244 <draw_circle>
-   903b0:	aa0d03f6 	mov	x22, x13
-   903b4:	d341fed6 	lsr	x22, x22, #1
-   903b8:	cb16016b 	sub	x11, x11, x22
-   903bc:	97ffffa2 	bl	90244 <draw_circle>
-   903c0:	aa0d03f6 	mov	x22, x13
-   903c4:	d341fed6 	lsr	x22, x22, #1
-   903c8:	cb16016b 	sub	x11, x11, x22
-   903cc:	97ffff9e 	bl	90244 <draw_circle>
-   903d0:	aa0c03f7 	mov	x23, x12
-   903d4:	d341fef7 	lsr	x23, x23, #1
-   903d8:	8b17018c 	add	x12, x12, x23
-   903dc:	aa0d03f6 	mov	x22, x13
-   903e0:	d342fed6 	lsr	x22, x22, #2
-   903e4:	8b16016b 	add	x11, x11, x22
-   903e8:	97ffff97 	bl	90244 <draw_circle>
-   903ec:	aa0d03f6 	mov	x22, x13
-   903f0:	d341fed6 	lsr	x22, x22, #1
-   903f4:	8b16016b 	add	x11, x11, x22
-   903f8:	97ffff93 	bl	90244 <draw_circle>
-   903fc:	aa0d03f6 	mov	x22, x13
-   90400:	d341fed6 	lsr	x22, x22, #1
-   90404:	8b16016b 	add	x11, x11, x22
-   90408:	97ffff8f 	bl	90244 <draw_circle>
-   9040c:	aa0d03f6 	mov	x22, x13
-   90410:	d341fed6 	lsr	x22, x22, #1
-   90414:	8b16016b 	add	x11, x11, x22
-   90418:	97ffff8b 	bl	90244 <draw_circle>
-   9041c:	aa0d03f6 	mov	x22, x13
-   90420:	d341fed6 	lsr	x22, x22, #1
-   90424:	8b16016b 	add	x11, x11, x22
-   90428:	97ffff87 	bl	90244 <draw_circle>
-   9042c:	aa0d03f6 	mov	x22, x13
-   90430:	d341fed6 	lsr	x22, x22, #1
-   90434:	8b16016b 	add	x11, x11, x22
-   90438:	97ffff83 	bl	90244 <draw_circle>
-   9043c:	d61f03a0 	br	x29
+00000000000903ac <.loop_waste>:
+   903ac:	f1000421 	subs	x1, x1, #0x1
+   903b0:	54ffffe1 	b.ne	903ac <.loop_waste>  // b.any
+
+00000000000903b4 <.end_waste>:
+   903b4:	d65f03c0 	ret
+
+00000000000903b8 <waste_time_2>:
+   903b8:	aa1e03fd 	mov	x29, x30
+   903bc:	b40000f8 	cbz	x24, 903d8 <end_waste_2>
+   903c0:	aa1803e2 	mov	x2, x24
+
+00000000000903c4 <loop_waste_2>:
+   903c4:	aa0203e0 	mov	x0, x2
+   903c8:	d376d400 	lsl	x0, x0, #10
+   903cc:	97fffff6 	bl	903a4 <waste_time>
+   903d0:	f1000442 	subs	x2, x2, #0x1
+   903d4:	54ffff81 	b.ne	903c4 <loop_waste_2>  // b.any
+
+00000000000903d8 <end_waste_2>:
+   903d8:	aa1d03fe 	mov	x30, x29
+   903dc:	d65f03c0 	ret
 	...
 
 Desensamblado de la sección .debug_line:
 
 0000000000000000 <.debug_line>:
-   0:	0000011f 	udf	#287
+   0:	0000010f 	udf	#271
    4:	00190002 	.inst	0x00190002 ; undefined
    8:	01040000 	.inst	0x01040000 ; undefined
    c:	000a0efb 	.inst	0x000a0efb ; undefined
   10:	01010101 	.inst	0x01010101 ; undefined
   14:	01000000 	.inst	0x01000000 ; undefined
-  18:	70706100 	adr	x0, e0c3b <draw_claud+0x508bf>
+  18:	70706100 	adr	x0, e0c3b <end_waste_2+0x50863>
   1c:	0000732e 	udf	#29486
   20:	00000000 	udf	#0
   24:	00c80209 	.inst	0x00c80209 ; undefined
@@ -16748,79 +16734,75 @@ Desensamblado de la sección .debug_line:
   44:	221e1e1e 	.inst	0x221e1e1e ; undefined
   48:	1e1d1703 	.inst	0x1e1d1703 ; undefined
   4c:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
-  50:	1e1e2420 	.inst	0x1e1e2420 ; undefined
-  54:	1e241f1e 	fcsel	s30, s24, s4, ne	// ne = any
-  58:	251f1e1e 	cmpgt	p14.b, p7/z, z16.b, #-1
-  5c:	1f1e1e1e 	fmadd	s30, s16, s30, s7
-  60:	1e1e1e25 	.inst	0x1e1e1e25 ; undefined
-  64:	1e1e211f 	.inst	0x1e1e211f ; undefined
-  68:	1e1e231f 	.inst	0x1e1e231f ; undefined
-  6c:	03231e1e 	.inst	0x03231e1e ; undefined
-  70:	21201d1d 	.inst	0x21201d1d ; undefined
-  74:	1e1e2120 	.inst	0x1e1e2120 ; undefined
-  78:	20201e1e 	.inst	0x20201e1e ; undefined
-  7c:	1e201e1e 	fcsel	s30, s16, s0, ne	// ne = any
-  80:	11031f1e 	add	w30, w24, #0xc7
-  84:	1f211f1d 	fnmadd	s29, s24, s1, s7
-  88:	1e1e1e21 	.inst	0x1e1e1e21 ; undefined
-  8c:	1e20201e 	.inst	0x1e20201e ; undefined
-  90:	1e1e211e 	.inst	0x1e1e211e ; undefined
-  94:	1d0f031f 	.inst	0x1d0f031f ; undefined
-  98:	1e1f1f20 	.inst	0x1e1f1f20 ; undefined
-  9c:	201e1f1f 	.inst	0x201e1f1f ; undefined
-  a0:	1e1e1f1f 	.inst	0x1e1e1f1f ; undefined
-  a4:	1e201e1e 	fcsel	s30, s16, s0, ne	// ne = any
-  a8:	1f1e1e1e 	fmadd	s30, s16, s30, s7
-  ac:	1e201e20 	fcsel	s0, s17, s0, ne	// ne = any
-  b0:	0f031e20 	.inst	0x0f031e20 ; undefined
-  b4:	221e1e1d 	.inst	0x221e1e1d ; undefined
-  b8:	1e1e221e 	.inst	0x1e1e221e ; undefined
-  bc:	1e201e1e 	fcsel	s30, s16, s0, ne	// ne = any
-  c0:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
-  c4:	1e21201e 	.inst	0x1e21201e ; undefined
-  c8:	1e1e201e 	.inst	0x1e1e201e ; undefined
-  cc:	1f1e1e1e 	fmadd	s30, s16, s30, s7
-  d0:	1f1d0d03 	fmadd	s3, s8, s29, s3
-  d4:	1e1f1f1e 	.inst	0x1e1f1f1e ; undefined
-  d8:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
-  dc:	1e1e1e1f 	.inst	0x1e1e1e1f ; undefined
-  e0:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
-  e4:	1e1e1f1e 	.inst	0x1e1e1f1e ; undefined
-  e8:	1d0b031f 	.inst	0x1d0b031f ; undefined
-  ec:	1f1e1e21 	fmadd	s1, s17, s30, s7
-  f0:	1f1e1e1f 	fmadd	s31, s16, s30, s7
-  f4:	1f1e1e1f 	fmadd	s31, s16, s30, s7
-  f8:	1f1e1e1f 	fmadd	s31, s16, s30, s7
-  fc:	1f1e1e1e 	fmadd	s30, s16, s30, s7
- 100:	1f1e1e23 	fmadd	s3, s17, s30, s7
- 104:	1f1f1e1e 	fmadd	s30, s16, s31, s7
- 108:	1f201f1e 	fnmadd	s30, s24, s0, s7
- 10c:	1e201f1e 	fcsel	s30, s24, s0, ne	// ne = any
- 110:	1f201f1e 	fnmadd	s30, s24, s0, s7
- 114:	1f201f1e 	fnmadd	s30, s24, s0, s7
- 118:	03201f1e 	.inst	0x03201f1e ; undefined
- 11c:	01021d0c 	.inst	0x01021d0c ; undefined
- 120:	4c010100 	.inst	0x4c010100 ; undefined
- 124:	02000000 	.inst	0x02000000 ; undefined
- 128:	00001b00 	udf	#6912
- 12c:	fb010400 	.inst	0xfb010400 ; undefined
- 130:	01000a0e 	.inst	0x01000a0e ; undefined
- 134:	00010101 	.inst	0x00010101 ; undefined
- 138:	00010000 	.inst	0x00010000 ; undefined
- 13c:	72617473 	.inst	0x72617473 ; undefined
- 140:	00732e74 	.inst	0x00732e74 ; undefined
- 144:	00000000 	udf	#0
- 148:	00020900 	.inst	0x00020900 ; undefined
- 14c:	00000800 	udf	#2048
- 150:	03000000 	.inst	0x03000000 ; undefined
- 154:	1e1e0130 	.inst	0x1e1e0130 ; undefined
- 158:	201e2120 	.inst	0x201e2120 ; undefined
- 15c:	1e1e1f1e 	.inst	0x1e1e1f1e ; undefined
- 160:	1e1e211e 	.inst	0x1e1e211e ; undefined
- 164:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
- 168:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
- 16c:	01809c02 	.inst	0x01809c02 ; undefined
- 170:	Address 0x170 is out of bounds.
+  50:	1d0c0320 	.inst	0x1d0c0320 ; undefined
+  54:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+  58:	1d090321 	.inst	0x1d090321 ; undefined
+  5c:	1d0b031e 	.inst	0x1d0b031e ; undefined
+  60:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+  64:	0a03221e 	and	w30, w16, w3, lsl #8
+  68:	1e1e1e1d 	.inst	0x1e1e1e1d ; undefined
+  6c:	231f1e1e 	.inst	0x231f1e1e ; undefined
+  70:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+  74:	23221e1e 	.inst	0x23221e1e ; undefined
+  78:	201e1f1e 	.inst	0x201e1f1e ; undefined
+  7c:	031e1f1e 	.inst	0x031e1f1e ; undefined
+  80:	03201d0a 	.inst	0x03201d0a ; undefined
+  84:	21201d1d 	.inst	0x21201d1d ; undefined
+  88:	1e1e2120 	.inst	0x1e1e2120 ; undefined
+  8c:	20201e1e 	.inst	0x20201e1e ; undefined
+  90:	1e201e1e 	fcsel	s30, s16, s0, ne	// ne = any
+  94:	11031f1e 	add	w30, w24, #0xc7
+  98:	1f211f1d 	fnmadd	s29, s24, s1, s7
+  9c:	1e1e1e21 	.inst	0x1e1e1e21 ; undefined
+  a0:	1e20201e 	.inst	0x1e20201e ; undefined
+  a4:	1e1e211e 	.inst	0x1e1e211e ; undefined
+  a8:	1d0f031f 	.inst	0x1d0f031f ; undefined
+  ac:	1e1f1f20 	.inst	0x1e1f1f20 ; undefined
+  b0:	201e1f1f 	.inst	0x201e1f1f ; undefined
+  b4:	1e1e1f1f 	.inst	0x1e1e1f1f ; undefined
+  b8:	1e201e1e 	fcsel	s30, s16, s0, ne	// ne = any
+  bc:	1f1e1e1e 	fmadd	s30, s16, s30, s7
+  c0:	1e201e20 	fcsel	s0, s17, s0, ne	// ne = any
+  c4:	0f031e20 	.inst	0x0f031e20 ; undefined
+  c8:	221e1e1d 	.inst	0x221e1e1d ; undefined
+  cc:	1e1e221e 	.inst	0x1e1e221e ; undefined
+  d0:	1e201e1e 	fcsel	s30, s16, s0, ne	// ne = any
+  d4:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+  d8:	1e21201e 	.inst	0x1e21201e ; undefined
+  dc:	1e1e201e 	.inst	0x1e1e201e ; undefined
+  e0:	1f1e1e1e 	fmadd	s30, s16, s30, s7
+  e4:	1f1d0d03 	fmadd	s3, s8, s29, s3
+  e8:	1e1f1f1e 	.inst	0x1e1f1f1e ; undefined
+  ec:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+  f0:	1e1e1e1f 	.inst	0x1e1e1e1f ; undefined
+  f4:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+  f8:	1e1e1f1e 	.inst	0x1e1e1f1e ; undefined
+  fc:	1d0a031f 	.inst	0x1d0a031f ; undefined
+ 100:	1f1e1f1e 	fmadd	s30, s24, s30, s7
+ 104:	1f1f1f22 	fmadd	s2, s25, s31, s7
+ 108:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+ 10c:	01021e20 	.inst	0x01021e20 ; undefined
+ 110:	4c010100 	.inst	0x4c010100 ; undefined
+ 114:	02000000 	.inst	0x02000000 ; undefined
+ 118:	00001b00 	udf	#6912
+ 11c:	fb010400 	.inst	0xfb010400 ; undefined
+ 120:	01000a0e 	.inst	0x01000a0e ; undefined
+ 124:	00010101 	.inst	0x00010101 ; undefined
+ 128:	00010000 	.inst	0x00010000 ; undefined
+ 12c:	72617473 	.inst	0x72617473 ; undefined
+ 130:	00732e74 	.inst	0x00732e74 ; undefined
+ 134:	00000000 	udf	#0
+ 138:	00020900 	.inst	0x00020900 ; undefined
+ 13c:	00000800 	udf	#2048
+ 140:	03000000 	.inst	0x03000000 ; undefined
+ 144:	1e1e0130 	.inst	0x1e1e0130 ; undefined
+ 148:	201e2120 	.inst	0x201e2120 ; undefined
+ 14c:	1e1e1f1e 	.inst	0x1e1e1f1e ; undefined
+ 150:	1e1e211e 	.inst	0x1e1e211e ; undefined
+ 154:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+ 158:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+ 15c:	01809c02 	.inst	0x01809c02 ; undefined
+ 160:	Address 0x160 is out of bounds.
 
 
 Desensamblado de la sección .debug_info:
@@ -16832,14 +16814,14 @@ Desensamblado de la sección .debug_info:
    c:	00000000 	udf	#0
   10:	000900c8 	.inst	0x000900c8 ; undefined
   14:	00000000 	udf	#0
-  18:	00090440 	.inst	0x00090440 ; undefined
+  18:	000903e0 	.inst	0x000903e0 ; undefined
 	...
   24:	00000006 	udf	#6
   28:	00000047 	udf	#71
   2c:	002a8001 	.inst	0x002a8001 ; NYI
   30:	00020000 	.inst	0x00020000 ; undefined
   34:	00000014 	udf	#20
-  38:	01230108 	.inst	0x01230108 ; undefined
+  38:	01130108 	.inst	0x01130108 ; undefined
   3c:	00000000 	udf	#0
   40:	00000008 	udf	#8
   44:	00c80000 	.inst	0x00c80000 ; undefined
@@ -16872,7 +16854,7 @@ Desensamblado de la sección .debug_aranges:
    c:	00000000 	udf	#0
   10:	000900c8 	.inst	0x000900c8 ; undefined
   14:	00000000 	udf	#0
-  18:	00000378 	udf	#888
+  18:	00000318 	udf	#792
 	...
   30:	0000002c 	udf	#44
   34:	002e0002 	.inst	0x002e0002 ; NYI

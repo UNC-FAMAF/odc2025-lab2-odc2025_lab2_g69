@@ -92,61 +92,9 @@ main:
 
 
 
-        //---------------------------------------------------------
-		// Dibujar arbol de frente
-		//---------------------------------------------------------
-		mov     x11, #400         // x inicial
-		mov     x12, #255  // y inicial
-        mov     x13, #20      // tamaño
-        movz    w15, 0x6633, lsl 0
-        
-        bl draw_tree
-    //-------------------
-
-    
-        //---------------------------------------------------------
-		// Dibujar arbol de frente
-		//---------------------------------------------------------
-		mov     x11, #50         // x inicial
-		mov     x12, #100       // y inicial
-        mov     x13, #100       // tamaño
-        movz    w15, 0x9900, lsl 0
-        
-        bl draw_tree
+       
 
 
-
-
-        //---------------------------------------------------------
-		// Dibujar arbol de frente
-		//---------------------------------------------------------
-		mov     x11, #150         // x inicial
-		mov     x12, #220      // y inicial
-        mov     x13, #50       // tamaño
-        movz    w15, 0x6600, lsl 0
-        
-        bl draw_tree
-
-
-
-
-        //---------------------------------------------------------
-		// Dibujar arbol de frente
-		//---------------------------------------------------------
-		mov     x11, #260         // x inicial
-		mov     x12, #220      // y inicial
-        mov     x13, #50       // tamaño
-        movz    w15, 0x3300, lsl 0
-        
-        bl draw_tree
-    //---------------------------------------------------------
-    // Dibujar nube
-    //---------------------------------------------------------
-        mov     x11, #400        // centro x
-        mov     x12, #30        // centro y
-        mov     x13, #10         // radio
-
-        bl draw_claud
 
 
     //---------------------------------------------------------
@@ -158,10 +106,103 @@ main:
     and     w11, w10, 0b10
     lsr     w11, w11, 1
 
+    // inicializamos la ariable que vamos usar para la animacion 
 
+    mov     x28, 1
 
 
 InfLoop:
+
+		
+       // modularizamos la posicion en x para que la nube nunca pare 
+
+        
+    cmp x28, SCREEN_WIDTH
+    csel x28, xzr, x28, gt
+
+
+
+
+        //---------------------------------------------------------
+		// dibujamos otra vez el cielo y el sol  
+		//---------------------------------------------------------
+		//---------------------------------------------------------
+		// Dibujar rectangulo azul
+		//---------------------------------------------------------
+		mov     x11, #0          // x inicial
+		mov     x12, #0        // y inicial
+		mov     x13, #640         // ancho (vertical)
+		mov     x14, #240        // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0x80FF, lsl 0     // 0x0000FF00 
+		
+
+		
+
+		bl      draw_rectangle
+
+
+
+
+
+
+    //---------------------------------------------------------
+    // Dibujar círculo amarillo
+    //---------------------------------------------------------
+    mov     x11, #400        // centro x
+    mov     x12, #30        // centro y
+    mov     x13, #50         // radio
+    mov     x14, x20         // framebuffer base
+    movz    w15, 0xFF66, lsl 0
+    movk    w15, 0x00FF, lsl 16   // rojo: 0x00FF0000
+
+    bl      draw_circle
+
+
+        //---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x28          // x inicial
+		mov     x12, #30        // y inicial
+		mov     x13, #20         // ancho (vertical)
+		mov     x14, #40       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+		
+
+		
+
+		bl      draw_rectangle
+
+        //---------------------------------------------------------
+		// perdemos tiempo para la animacion 
+		//---------------------------------------------------------
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+
+        
+
+        
+
+
+
+    add x28 , x28, 1
+
+
     b       InfLoop
 
 
@@ -437,111 +478,36 @@ draw_tree :
     ret
     
 
-
-draw_claud: 
-    // x11 posicion en x
-    // x12 posicion en y
-    // x13 radio
-
-// por pereza esto dibuja circulos en forma de nube
-
-    mov x29, x30
-
-
-
-    mov     x14, x20         // framebuffer base
-    movz    w15, 0xE0E0, lsl 0
-    movk    w15, 0x00E0, lsl 16   // rojo: 0x00FF0000
-
-    bl      draw_circle
-    
-    mov x22, x13
-    lsr x22, x22, #1
-    sub x11, x11, x22
-
-    bl      draw_circle
-
-    mov x22, x13
-    lsr x22, x22, #1
-    sub x11, x11, x22
-
-    bl      draw_circle
-
-    mov x22, x13
-    lsr x22, x22, #1
-    sub x11, x11, x22
-
-    bl      draw_circle
-    mov x22, x13
-    lsr x22, x22, #1
-    sub x11, x11, x22
-
-    bl      draw_circle
+    // ----------------------------------------------------------
+    // Subrutina: waste_time
+    // ----------------------------------------------------------
+    // Entrada:
+    //   x23 = número de iteraciones a perder
+    // ----------------------------------------------------------
+waste_time:
+    cbz x23, .end_waste         // Si x23 == 0, salir
+    mov x1, x23                 // Copiar contador a x1
+.loop_waste:
+    subs x1, x1, #1            // x1 = x1 - 1 y actualizar flags
+    b.ne .loop_waste           // Si x1 != 0, repetir
+.end_waste:
+    ret
 
 
 
+waste_time_2:
+    mov x29, x30                  // Guardar LR
 
+    cbz x24, end_waste_2          // Si x24 == 0, salir
 
-    mov x23, x12
-    lsr x23,x23,1
-    add x12, x12, x23
+    mov x2, x24                   // Cantidad de repeticiones
+loop_waste_2:
+    mov x0, x2                    // x0 = índice actual
+    lsl x0, x0, #10               // x0 *= 1024 (más ciclos cuanto más grande x24)
+    bl waste_time                 // pierde x0 ciclos
+    subs x2, x2, #1
+    b.ne loop_waste_2
 
-    mov x22, x13
-    lsr x22, x22, #2
-    add x11, x11, x22
-
-    bl      draw_circle
-   
-    mov x22, x13
-    lsr x22, x22, #1
-
-    add x11, x11, x22
-
-
-    bl      draw_circle
-
-    mov x22, x13
-    lsr x22, x22, #1
-
-    add x11, x11, x22
-
-
-    bl      draw_circle
-        mov x22, x13
-    lsr x22, x22, #1
-
-    add x11, x11, x22
-
-
-    bl      draw_circle
-
-    mov x22, x13
-    lsr x22, x22, #1
-
-    add x11, x11, x22
-
-
-    bl      draw_circle
-
-    mov x22, x13
-    lsr x22, x22, #1
-
-    add x11, x11, x22
-
-
-    bl      draw_circle
-
-
-
-
-
-
-
-
-
-
-
-    br x29
-    
-
-
+end_waste_2:
+    mov x30, x29
+    ret
