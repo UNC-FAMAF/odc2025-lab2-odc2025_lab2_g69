@@ -1,15 +1,6 @@
 
 There are no discarded input sections
 
-<<<<<<< Updated upstream
-Configuración de la Memoria
-
-Nombre           Origen             Longitud           Atributos
-*default*        0x0000000000000000 0xffffffffffffffff
-
-Guión del enlazador y mapa de memoria
-
-=======
 Memory Configuration
 
 Name             Origin             Length             Attributes
@@ -18,55 +9,15 @@ Name             Origin             Length             Attributes
 Linker script and memory map
 
 LOAD _sonic.o
->>>>>>> Stashed changes
 LOAD app.o
 LOAD start.o
                 0x0000000000080000                . = 0x80000
 
-<<<<<<< Updated upstream
-.text           0x0000000000080000    0x90300
-=======
 .text           0x0000000000080000    0x903f0
->>>>>>> Stashed changes
  *(.text.boot)
  .text.boot     0x0000000000080000    0x100c8 start.o
                 0x0000000000080000                _start
  *(.text*)
-<<<<<<< Updated upstream
- .text          0x00000000000900c8      0x238 app.o
-                0x00000000000900c8                main
-                0x000000000009019c                draw_square
-                0x00000000000901e0                draw_rectangle
- .text          0x0000000000090300    0x80000 start.o
-
-.iplt           0x0000000000110300        0x0
- .iplt          0x0000000000110300        0x0 app.o
-
-.rela.dyn       0x0000000000110300        0x0
- .rela.iplt     0x0000000000110300        0x0 app.o
- .rela.text.boot
-                0x0000000000110300        0x0 app.o
-
-.data           0x0000000000110300        0x0
- .data          0x0000000000110300        0x0 app.o
- .data          0x0000000000110300        0x0 start.o
-
-.igot.plt       0x0000000000110300        0x0
- .igot.plt      0x0000000000110300        0x0 app.o
-
-.bss            0x0000000000110300        0x0
- *(.bss*)
- .bss           0x0000000000110300        0x0 app.o
- .bss           0x0000000000110300        0x0 start.o
-
-.bss            0x0000000000110300        0x0
-                0x0000000000110300                . = ALIGN (0x10)
-                0x0000000000110300                __bss_start = .
- *(.bss .bss.*)
- *(COMMON)
-                0x0000000000110300                __bss_end = .
-                0x0000000000110300                _end = .
-=======
  .text          0x00000000000900c8       0x4c _sonic.o
                 0x00000000000900c8                draw_sonic
  .text          0x0000000000090114      0x2dc app.o
@@ -106,35 +57,10 @@ LOAD start.o
  *(COMMON)
                 0x00000000001103f0                __bss_end = .
                 0x00000000001103f0                _end = .
->>>>>>> Stashed changes
                 0x0000000000000000                __bss_size = ((__bss_end - __bss_start) >> 0x3)
 OUTPUT(kernel8.elf elf64-littleaarch64)
 LOAD linker stubs
 
-<<<<<<< Updated upstream
-.debug_line     0x0000000000000000      0x11b
- .debug_line    0x0000000000000000       0xcb app.o
- .debug_line    0x00000000000000cb       0x50 start.o
-
-.debug_info     0x0000000000000000       0x5c
- .debug_info    0x0000000000000000       0x2e app.o
- .debug_info    0x000000000000002e       0x2e start.o
-
-.debug_abbrev   0x0000000000000000       0x28
- .debug_abbrev  0x0000000000000000       0x14 app.o
- .debug_abbrev  0x0000000000000014       0x14 start.o
-
-.debug_aranges  0x0000000000000000       0x60
- .debug_aranges
-                0x0000000000000000       0x30 app.o
- .debug_aranges
-                0x0000000000000030       0x30 start.o
-
-.debug_str      0x0000000000000000       0x5b
- .debug_str     0x0000000000000000       0x5b app.o
-                                         0x53 (tamaño antes de la relajación)
- .debug_str     0x000000000000005b       0x55 start.o
-=======
 .debug_line     0x0000000000000000      0x18f
  .debug_line    0x0000000000000000       0x49 _sonic.o
  .debug_line    0x0000000000000049       0xf6 app.o
@@ -163,4 +89,3 @@ LOAD linker stubs
                                          0x7b (size before relaxing)
  .debug_str     0x00000000000000ca       0x78 app.o
  .debug_str     0x00000000000000ca       0x55 start.o
->>>>>>> Stashed changes
