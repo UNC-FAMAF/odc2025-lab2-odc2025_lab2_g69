@@ -109,6 +109,7 @@ main:
     // inicializamos la ariable que vamos usar para la animacion 
 
     mov     x28, 1
+    mov     x27, 1
 
 
 InfLoop:
@@ -132,7 +133,7 @@ InfLoop:
 		mov     x11, #0          // x inicial
 		mov     x12, #0        // y inicial
 		mov     x13, #640         // ancho (vertical)
-		mov     x14, #240        // alto (horizontal)
+		mov     x14, #160        // alto (horizontal)
 		mov     x15, x20           // framebuffer base
 		movz    w16, 0x80FF, lsl 0     // 0x0000FF00 
 		
@@ -163,7 +164,7 @@ InfLoop:
 		// Dibujar rectangulo blanco (nube)
 		//---------------------------------------------------------
 		mov     x11, x28          // x inicial
-		mov     x12, #30        // y inicial
+		mov     x12, #40        // y inicial
 		mov     x13, #20         // ancho (vertical)
 		mov     x14, #40       // alto (horizontal)
 		mov     x15, x20           // framebuffer base
@@ -175,6 +176,73 @@ InfLoop:
 
 		bl      draw_rectangle
 
+
+
+        //---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x28          // x inicial
+		mov     x12, #50        // y inicial
+		mov     x13, #60         // ancho (vertical)
+		mov     x14, #10       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+
+        bl      draw_rectangle
+
+
+        //---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x27          // x inicial
+		mov     x12, #50        // y inicial
+		mov     x13, #60         // ancho (vertical)
+		mov     x14, #10       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+
+        bl      draw_rectangle
+		
+
+                //---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x26          // x inicial
+		mov     x12, #100        // y inicial
+		mov     x13, #60         // ancho (vertical)
+		mov     x14, #20       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+
+        bl      draw_rectangle
+		
+		//---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x27          // x inicial
+		mov     x12, #80        // y inicial
+		mov     x13, #30         // ancho (vertical)
+		mov     x14, #20       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+        bl      draw_rectangle
+
+		
+		//---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x26          // x inicial
+		mov     x12, #50       // y inicial
+		mov     x13, #15        // ancho (vertical)
+		mov     x14, #5      // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+        bl      draw_rectangle
         //---------------------------------------------------------
 		// perdemos tiempo para la animacion 
 		//---------------------------------------------------------
@@ -193,6 +261,35 @@ InfLoop:
         bl waste_time_2
 
 
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+
 
         
 
@@ -201,6 +298,8 @@ InfLoop:
 
 
     add x28 , x28, 1
+    add x27,  x27, 3 
+    add x26, x26, 2
 
 
     b       InfLoop
@@ -511,3 +610,5 @@ loop_waste_2:
 end_waste_2:
     mov x30, x29
     ret
+
+
