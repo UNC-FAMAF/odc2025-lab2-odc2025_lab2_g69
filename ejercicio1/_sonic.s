@@ -1,3 +1,5 @@
+    .equ SCREEN_WIDTH,      640
+    .equ SCREEN_HEIGH,      480
 
 .global draw_sonic
 
@@ -617,7 +619,7 @@ draw_sonic:
                     movk    w16, 0x00E6, lsl 16
                     bl      draw_rectangle
         //      brazos
-            // brazo derecho
+            // brazo izquierdo
                 mov      x11, x25
                 add      x11, x11, #37
                 mov      x12, x26
@@ -636,21 +638,251 @@ draw_sonic:
                 mov     x13, #5             // radio
                 mov     x14, x27             // framebuffer base
                 movz    w15, 0xFFFF, lsl 0
-                movk    w15, 0x00FF, lsl 16  
+                movk    w15, 0x0099, lsl 16  
 
                 bl      draw_circle
 
-            // brazo izquierdo
+                //loop brazp
+                    mov     x28, #0
+                loop_arm1:  
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #35
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #48
+                    mov     x13, x25           // x final
+                    add     x13, x13, #32
+                    mov     x14, x26           // y final
+                    add     x14, x14, #68
+                    
+                    mov     x15, x27           // framebuffer base
+                    movz    w16, 0xA523, lsl 0
+                    movk    w16, 0x00E6, lsl 16    // 0x00FFFFFF
+
+                    add     x11, x11, x28
+                    add     x13, x13, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line_y
+
+                    cmp     x28, #4
+
+                    b.ne    loop_arm1
+
+            // brazo derecho
                 mov      x11, x25
                 add      x11, x11, #65
                 mov      x12, x26
                 add      x12, x12, #50
-                mov     x13, #3             // radio
+                mov     x13, #2             // radio
                 mov     x14, x27             // framebuffer base
                 movz    w15, 0xA523, lsl 0
                 movk    w15, 0x00E6, lsl 16  
 
                 bl      draw_circle
+            //loop brazp
+                    mov     x28, #0
+                loop_arm:  
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #63
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #50
+                    mov     x13, x25           // x final
+                    add     x13, x13, #68
+                    mov     x14, x26           // y final
+                    add     x14, x14, #70
+                    
+                    mov     x15, x27           // framebuffer base
+                    movz    w16, 0xA523, lsl 0
+                    movk    w16, 0x00E6, lsl 16    // 0x00FFFFFF
+
+                    add     x11, x11, x28
+                    add     x13, x13, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line_y
+
+                    cmp     x28, #4
+
+                    b.ne    loop_arm
+// mano
+                mov      x11, x25
+                add      x11, x11, #70
+                mov      x12, x26
+                add      x12, x12, #70
+                mov     x13, #5             // radio
+                mov     x14, x27             // framebuffer base
+                movz    w15, 0xFFFF, lsl 0
+                movk    w15, 0x00FF, lsl 16  
+                bl      draw_circle
+                
+                
 
         ret
+
+
+//-----------------------------------
+//sub rutina trazar linea
+//-----------------------------------
+
+// Entradas:
+// x11 = x1 inicial
+// x12 = y1 inicial
+// x13 = x2 final
+// x14 = y2 final
+// x15 = framebuffer base
+// x16 = color
+//---------------------------------------------------------
+
+// draw_line :
+    sub x17, x11, x13 // dx = x1 - x2 (distancia entre ambos x)
+    sub x18, x12, x14 // dy = y1 - y2 (distancia entre ambos y)
+    
+    // D inicial
+        add x19, x18, x18 // D = 2*dy
+        sub x19, x19, x17 // D = 2*dy-dx
+    
+loop:
+    mov     x24, x12           // y_actual
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x21      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+    str     w16, [x15, x24]    // framebuffer[offset] = color
+
+
+    ret
+// Entradas: x1, y1, x2, y2 en X11, X12, X13, X14
+//!draw_line:
+draw_line_x:
+    SUB X4, X13, X11        // dx = x2 - x1
+    SUB X5, X14, X12        // dy = y2 - y1
+
+    LSL X6, X5, #1        // 2*dy
+    SUB X7, X6, X4        // D = 2*dy - dx
+
+    MOV X8, X11            // x = x1
+    MOV X9, X12            // y = y1
+
+loop_start:
+    MOV X10, X8
+    MOV X11, X9
+
+    mov     x24, x9           // y_actual
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x8      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+    str     w16, [x15, x24]
+    
+
+    CMP X8, X13
+    B.EQ loop_end
+
+    ADD X8, X8, #1        // x++
+    CMP X7, #0
+    BLE skip_y_inc
+
+    ADD X9, X9, #1        // y++
+    lsl x4, x4, #1
+    SUB X7, X7, X4  // D = D - 2*dx
+
+skip_y_inc:
+    ADD X7, X7, X6        // D = D + 2*dy
+    B loop_start
+
+loop_end:
+    RET
+
+draw_line_y:
+        cmp     x13, x11
+        b.le    start_11
+
+start_00:
+        SUB X4, X13, X11        // dx = x2 - x1
+        SUB X5, X14, X12        // dy = y2 - y1
+
+        LSL X6, X4, #1        // 2*dx
+        SUB X7, X6, X5        // D = 2*dx - dy
+
+        MOV X8, X11            // x = x1
+        MOV X9, X12            // y = y1
+
+    y_start_0:
+            MOV X0, X8
+            MOV X1, X9
+
+            mov     x24, x9           // y_actual
+            mov     x23, SCREEN_WIDTH
+            mul     x24, x24, x23      // y * SCREEN_WIDTH
+            add     x24, x24, x8      // + x_actual
+            lsl     x24, x24, 2        // * 4 (bytes por pixel)
+            str     w16, [x15, x24]
+
+            CMP X9, X14
+            B.EQ end_0
+
+            ADD X9, X9, #1        // y++
+
+            CMP X7, #0
+            BLE skip_x0
+
+            ADD X8, X8, #1        // x++
+            SUB X7, X7, X5, LSL #1  // D -= 2*dy
+
+        skip_x0:
+            ADD X7, X7, X6        // D += 2*dx
+            B y_start_0
+
+        end_0:
+            RET
+
+start_11:
+        SUB X4, X11, X13       // dx = x1 - x2
+        SUB X5, X12, X14        // dy = y1 - y2
+
+        LSL X6, X4, #1        // 2*dx
+        sub X7, X6, X5        // D = 2*dx + dy
+
+        MOV X8, X11            // x = x1
+        MOV X9, X12            // y = y1
+
+
+    y_start_1:
+            MOV X0, X8
+            MOV X1, X9
+
+            mov     x24, x9           // y_actual
+            mov     x23, SCREEN_WIDTH
+            mul     x24, x24, x23      // y * SCREEN_WIDTH
+            add     x24, x24, x8      // + x_actual
+            lsl     x24, x24, 2        // * 4 (bytes por pixel)
+            str     w16, [x15, x24]
+
+            CMP X9, X14
+            B.EQ end_1
+
+            ADD X9, X9, #1        // y++
+
+            CMP X7, #0
+            BLE skip_x1
+
+            // D > 0
+            SUB X8, X8, #1            // x--
+            LSL X5, X5, #1            // 2*dy
+            LSL X6, X4, #1            // 2*dx
+            SUB X7, X7, X5            // D -= 2*dy
+            ADD X7, X7, X6            // D += 2*dx
+            B y_start_1
+
+            skip_x1:
+            LSL X6, X4, #1            // 2*dx
+            ADD X7, X7, X6            // D += 2*dx
+            B y_start_1
+
+        end_1:
+            RET
+
+
+
+    
 
