@@ -1,53 +1,1380 @@
-	.equ SCREEN_WIDTH, 		640
-	.equ SCREEN_HEIGH, 		480
-	.equ BITS_PER_PIXEL,  	32
+    .equ SCREEN_WIDTH,      640
+    .equ SCREEN_HEIGH,      480
+    .equ BITS_PER_PIXEL,    32
 
-	.equ GPIO_BASE,      0x3f200000
-	.equ GPIO_GPFSEL0,   0x00
-	.equ GPIO_GPLEV0,    0x34
+    .equ GPIO_BASE,         0x3f200000
+    .equ GPIO_GPFSEL0,      0x00
+    .equ GPIO_GPLEV0,       0x34
 
-	.globl main
+    .globl main
+    .global draw_square
+	.global draw_rectangle
 
 main:
-	// x0 contiene la direccion base del framebuffer
- 	mov x20, x0	// Guarda la dirección base del framebuffer en x20
-	//---------------- CODE HERE ------------------------------------
+    // x0 contiene la dirección base del framebuffer
+    mov     x20, x0           // Guardar copia en x20
 
-	movz x10, 0xC7, lsl 16
-	movk x10, 0x1585, lsl 00
+    //---------------------------------------------------------
+    // Pintar fondo de color verde 
+    //---------------------------------------------------------
+		
+		movz    w10, 0x6633, lsl 0  
+  
+        
+    
 
-	mov x2, SCREEN_HEIGH         // Y Size
-loop1:
-	mov x1, SCREEN_WIDTH         // X Size
-loop0:
-	stur w10,[x0]  // Colorear el pixel N
-	add x0,x0,4	   // Siguiente pixel
-	sub x1,x1,1	   // Decrementar contador X
-	cbnz x1,loop0  // Si no terminó la fila, salto
-	sub x2,x2,1	   // Decrementar contador Y
-	cbnz x2,loop1  // Si no es la última fila, salto
+    mov     x2, SCREEN_HEIGH     // contador de filas
+	loop1:
+		mov     x1, SCREEN_WIDTH     // contador de columnas
+	loop0:
+		str     w10, [x0]            // pintar píxel
+		add     x0, x0, 4
+		sub     x1, x1, 1
+		cbnz    x1, loop0
+		sub     x2, x2, 1
+		cbnz    x2, loop1
 
-	// Ejemplo de uso de gpios
-	mov x9, GPIO_BASE
+		//---------------------------------------------------------
+		// Dibujar cuadrado amarillo
+		//---------------------------------------------------------
+		mov     x11, #100           // x inicial
+		mov     x12, #50            // y inicial
+		mov     x13, #32            // tamaño del cuadrado
+		mov     x14, x20            // framebuffer base
+		movz    w15, 0xFF00, lsl 0
+		movk    w15, 0x00FF, lsl 16 // amarillo 0x00FFFF00
 
-	// Atención: se utilizan registros w porque la documentación de broadcom
-	// indica que los registros que estamos leyendo y escribiendo son de 32 bits
+		bl      draw_square
 
-	// Setea gpios 0 - 9 como lectura
-	str wzr, [x9, GPIO_GPFSEL0]
+		//---------------------------------------------------------
+		// Dibujar rectangulo azul
+		//---------------------------------------------------------
+		mov     x11, #0          // x inicial
+		mov     x12, #0        // y inicial
+		mov     x13, #640         // ancho (vertical)
+		mov     x14, #240        // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0x80FF, lsl 0     // 0x0000FF00 
+		
 
-	// Lee el estado de los GPIO 0 - 31
-	ldr w10, [x9, GPIO_GPLEV0]
+		
 
-	// And bit a bit mantiene el resultado del bit 2 en w10
-	and w11, w10, 0b10
+		bl      draw_rectangle
 
-	// w11 será 1 si había un 1 en la posición 2 de w10, si no será 0
-	// efectivamente, su valor representará si GPIO 2 está activo
-	lsr w11, w11, 1
 
-	//---------------------------------------------------------------
-	// Infinite Loop
+
+
+
+//---------------------------------------------------------
+// Dibujar triangulo rojo
+//---------------------------------------------------------
+//        
+  //      mov     x11, #150         // x inicial
+//		mov     x12, #200          // y inicial
+//        mov     x13, #200           // altura
+//        mov     x14, x20           // framebuffer base
+//		movz    w15, 0x0000, lsl 0     // 0x0000FF00 
+//		movk    w15, 0x00CC, lsl 16    // 0xFF00FF00 
+//
+  //      bl draw_triangle
+
+      
+    //---------------------------------------------------------
+    // Dibujar círculo amarillo
+    //---------------------------------------------------------
+    mov     x11, #400        // centro x
+    mov     x12, #30        // centro y
+    mov     x13, #50         // radio
+    mov     x14, x20         // framebuffer base
+    movz    w15, 0xFF66, lsl 0
+    movk    w15, 0x00FF, lsl 16   // rojo: 0x00FF0000
+
+
+    bl      draw_circle
+    
+
+
+    //---------------------------------------------------------
+    // aca dibujamos arboles
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    // ultima fila de arboles
+    //---------------------------------------------------------
+  
+  
+
+  
+  
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 25   // posicion en x
+    mov x12, 250    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 48   // posicion en x
+    mov x12, 270    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 75  // posicion en x
+    mov x12, 230  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 115   // posicion en x
+    mov x12, 260    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 125   // posicion en x
+    mov x12, 280   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 148   // posicion en x
+    mov x12, 240   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 175  // posicion en x
+    mov x12, 230  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 215   // posicion en x
+    mov x12, 260    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 225   // posicion en x
+    mov x12, 280   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 248   // posicion en x
+    mov x12, 240   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 275  // posicion en x
+    mov x12, 230  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 315   // posicion en x
+    mov x12, 260    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 325   // posicion en x
+    mov x12, 280   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 348   // posicion en x
+    mov x12, 240   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 375  // posicion en x
+    mov x12, 230  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 415   // posicion en x
+    mov x12, 260    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 425   // posicion en x
+    mov x12, 280   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 448   // posicion en x
+    mov x12, 240   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 475  // posicion en x
+    mov x12, 230  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 515   // posicion en x
+    mov x12, 260    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 525   // posicion en x
+    mov x12, 280   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 548   // posicion en x
+    mov x12, 240   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 575  // posicion en x
+    mov x12, 230  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 615   // posicion en x
+    mov x12, 260    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 625   // posicion en x
+    mov x12, 280   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 648   // posicion en x
+    mov x12, 240   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 675  // posicion en x
+    mov x12, 230  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+       
+    //---------------------------------------------------------
+    // fila intermedia de arboles
+    //---------------------------------------------------------
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 25   // posicion en x
+    mov x12, 350    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 48   // posicion en x
+    mov x12, 370    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 75  // posicion en x
+    mov x12, 330  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 115   // posicion en x
+    mov x12, 360    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 125   // posicion en x
+    mov x12, 380   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 148   // posicion en x
+    mov x12, 340   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 175  // posicion en x
+    mov x12, 330  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 215   // posicion en x
+    mov x12, 360    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 225   // posicion en x
+    mov x12, 380   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 248   // posicion en x
+    mov x12, 340   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 275  // posicion en x
+    mov x12, 330  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 315   // posicion en x
+    mov x12, 360    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 325   // posicion en x
+    mov x12, 380   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 348   // posicion en x
+    mov x12, 340   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 375  // posicion en x
+    mov x12, 330  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 415   // posicion en x
+    mov x12, 360    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 425   // posicion en x
+    mov x12, 380   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 448   // posicion en x
+    mov x12, 340   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 475  // posicion en x
+    mov x12, 330  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 515   // posicion en x
+    mov x12, 360    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 525   // posicion en x
+    mov x12, 380   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 548   // posicion en x
+    mov x12, 340   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 575  // posicion en x
+    mov x12, 330  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 615   // posicion en x
+    mov x12, 360    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    
+
+    bl draw_tree 
+
+
+
+        //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 625   // posicion en x
+    mov x12, 380   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0066, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 648   // posicion en x
+    mov x12, 340   // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    movk    w15, 0x0033, lsl 16 
+
+    bl draw_tree 
+
+
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 675  // posicion en x
+    mov x12, 330  // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x6600, lsl 0    
+    
+
+    bl draw_tree 
+       
+  
+  
+       
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 45    // posicion en x
+    mov x12, 300    // posicion en y 
+    mov x13, 30     // tamaño
+    movz    w15, 0x9900, lsl 0    
+    movk    w15, 0x004C, lsl 16 
+
+    bl draw_tree 
+
+    //---------------------------------------------------------
+    // dibujar arbol
+    //---------------------------------------------------------
+
+    mov x11, 30     // posicion en x
+    mov x12, 350    // posicion en y 
+    mov x13, 50     // tamaño
+    movz    w15, 0x6600, lsl 0     // marron
+
+    bl draw_tree 
+
+
+
+
+
+
+    //---------------------------------------------------------
+    // Leer GPIO (opcional)
+    //---------------------------------------------------------
+    mov     x9, GPIO_BASE
+    str     wzr, [x9, GPIO_GPFSEL0] // configurar entrada
+    ldr     w10, [x9, GPIO_GPLEV0]
+    and     w11, w10, 0b10
+    lsr     w11, w11, 1
+
+    // inicializamos la ariable que vamos usar para la animacion 
+
+    mov     x28, 1
+    mov     x27, 1
+	
+
 
 InfLoop:
-	b InfLoop
+
+		
+       // modularizamos la posicion en x para que la nube nunca pare 
+
+        
+    cmp x28, SCREEN_WIDTH
+    csel x28, xzr, x28, gt
+
+
+
+
+        //---------------------------------------------------------
+		// dibujamos otra vez el cielo y el sol  
+		//---------------------------------------------------------
+		//---------------------------------------------------------
+		// Dibujar rectangulo azul
+		//---------------------------------------------------------
+		mov     x11, #0          // x inicial
+		mov     x12, #0        // y inicial
+		mov     x13, #640         // ancho (vertical)
+		mov     x14, #160        // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0x80FF, lsl 0     // 0x0000FF00 
+		
+
+		
+
+		bl      draw_rectangle
+
+
+
+
+
+
+    //---------------------------------------------------------
+    // Dibujar círculo amarillo
+    //---------------------------------------------------------
+    mov     x11, #400        // centro x
+    mov     x12, #30        // centro y
+    mov     x13, #50         // radio
+    mov     x14, x20         // framebuffer base
+    movz    w15, 0xFF66, lsl 0
+    movk    w15, 0x00FF, lsl 16   // rojo: 0x00FF0000
+
+    bl      draw_circle
+
+
+        //---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x28          // x inicial
+		mov     x12, #40        // y inicial
+		mov     x13, #20         // ancho (vertical)
+		mov     x14, #40       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+		
+
+		
+
+		bl      draw_rectangle
+
+
+
+        //---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x28          // x inicial
+		mov     x12, #50        // y inicial
+		mov     x13, #60         // ancho (vertical)
+		mov     x14, #10       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+
+        bl      draw_rectangle
+
+
+        //---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x27          // x inicial
+		mov     x12, #50        // y inicial
+		mov     x13, #60         // ancho (vertical)
+		mov     x14, #10       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+
+        bl      draw_rectangle
+		
+
+                //---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x26          // x inicial
+		mov     x12, #100        // y inicial
+		mov     x13, #60         // ancho (vertical)
+		mov     x14, #20       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+
+        bl      draw_rectangle
+		
+		//---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x27          // x inicial
+		mov     x12, #80        // y inicial
+		mov     x13, #30         // ancho (vertical)
+		mov     x14, #20       // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+        bl      draw_rectangle
+
+		
+		//---------------------------------------------------------
+		// Dibujar rectangulo blanco (nube)
+		//---------------------------------------------------------
+		mov     x11, x26          // x inicial
+		mov     x12, #50       // y inicial
+		mov     x13, #15        // ancho (vertical)
+		mov     x14, #5      // alto (horizontal)
+		mov     x15, x20           // framebuffer base
+		movz    w16, 0xE0E0, lsl 0     
+        movk    w16, 0x00E0, lsl 16
+        bl      draw_rectangle
+
+
+
+
+        //---------------------------------------------------------
+		// perdemos tiempo para la animacion 
+		//---------------------------------------------------------
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+        mov x24, 10000
+        bl waste_time_2
+
+        mov x24, 10000
+        bl waste_time_2
+
+
+
+
+        
+
+        
+
+
+
+    add x28 , x28, 1
+    add x27,  x27, 3 
+    add x26, x26, 2
+
+
+    b       InfLoop
+
+
+
+//
+//						   _                _   _                 
+//				 ___ _   _| |__  _ __ _   _| |_(_)_ __   __ _ ___ 
+//				/ __| | | | '_ \| '__| | | | __| | '_ \ / _` / __|
+//				\__ \ |_| | |_) | |  | |_| | |_| | | | | (_| \__ \
+//				|___/\__,_|_.__/|_|   \__,_|\__|_|_| |_|\__,_|___/
+//				/ / _|_   _ _ __   ___(_) ___  _ __   ___  __\ \ 
+//				| | |_| | | | '_ \ / __| |/ _ \| '_ \ / _ \/ __| |
+//				| |  _| |_| | | | | (__| | (_) | | | |  __/\__ \ |
+//				| |_|  \__,_|_| |_|\___|_|\___/|_| |_|\___||___/ |
+//				\_\                                          /_/ 
+//
+
+//---------------------------------------------------------
+// Subrutina: draw_square
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = tamaño
+// x14 = framebuffer base
+// x15 = color
+//---------------------------------------------------------
+draw_square:
+    // Guardamos la altura restante en x16 (contador vertical)
+    mov     x16, x13            // x16 = altura del cuadrado (filas restantes)
+
+    // y_actual = y inicial -> usamos x17 como y_actual
+    mov     x17, x12            // x17 = fila actual
+
+.loop_y_sq:
+    // Ancho restante en x18 (contador horizontal)
+    mov     x18, x13            // x18 = ancho del cuadrado (columnas restantes)
+
+    // x_actual = x inicial -> usamos x19 como x_actual
+    mov     x19, x11            // x19 = columna actual
+
+.loop_x_sq:
+    // Calcular offset en memoria: offset = (y_actual * SCREEN_WIDTH + x_actual) * 4
+    mov     x22, x17            // x22 = y_actual
+    mov     x21, SCREEN_WIDTH   // x21 = SCREEN_WIDTH
+    mul     x22, x22, x21       // x22 = y_actual * SCREEN_WIDTH
+    add     x22, x22, x19       // x22 = y_actual * SCREEN_WIDTH + x_actual
+    lsl     x22, x22, 2         // x22 = offset en bytes (4 bytes por píxel)
+
+    // Escribir color en framebuffer[offset]
+    str     w15, [x14, x22]     // framebuffer[offset] = color
+
+    // Incrementar columna actual y decrementar contador horizontal
+    add     x19, x19, 1         // x_actual++
+    subs    x18, x18, 1         // columnas restantes--
+    b.ne    .loop_x_sq             // si columnas restantes ≠ 0, repetir loop_x_sq
+
+    // Incrementar fila actual y decrementar contador vertical
+    add     x17, x17, 1         // y_actual++
+    subs    x16, x16, 1         // filas restantes--
+    b.ne    .loop_y_sq          // si filas restantes ≠ 0, repetir loop_y_sq
+
+    ret                         // retornar al programa que llamó
+
+//---------------------------------------------------------
+// Subrutina: draw_rectangle
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = tamaño x
+// x14 = tamaño y
+// x15 = framebuffer base
+// x16 = color
+//---------------------------------------------------------
+
+draw_rectangle :
+
+	// inicializamos el contador de Y
+	mov x17, x14
+	// guardamos la posicion de y en x18
+	mov x18,x12
+
+loop_y_rec:
+	// inicializamos el contador de x con el valor inicial 
+	mov x19, x13
+	//guardamos la posicion incial de x
+	mov x21, x11
+
+loop_x_rec: 
+    // Calcular offset
+    mov     x24, x18           // y_actual
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x21      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+
+    // Escribir pixel
+    str     w16, [x15, x24]    // framebuffer[offset] = color
+
+    // Incrementar x_actual y continuar
+    add     x21, x21, 1
+    subs    x19, x19, 1
+    b.ne    loop_x_rec
+
+
+    // Incrementar y_actual y decrementar contador vertical
+    add     x18, x18, 1
+    subs    x17, x17, 1
+    b.ne    loop_y_rec
+
+    ret
+
+//---------------------------------------------------------
+// Subrutina: draw_circle
+//---------------------------------------------------------
+// Entradas:
+// x11 = centro_x
+// x12 = centro_y
+// x13 = radio
+// x14 = framebuffer base
+// x15 = color
+//---------------------------------------------------------
+
+draw_circle:
+    // Guardar registros
+    stp x19, x20, [sp, #-16]!
+
+    // r² = x13 * x13
+    mul x16, x13, x13        // x16 = radio²
+
+    mov x17, #0              // y = 0
+.loop_y_circle:
+    cmp x17, SCREEN_HEIGH
+    bge .end_circle
+
+    mov x18, #0              // x = 0
+.loop_x_circle:
+    cmp x18, SCREEN_WIDTH
+    bge .next_row_circle
+
+    // dx = x - centro_x
+    sub x19, x18, x11
+    // dy = y - centro_y
+    sub x20, x17, x12
+    // dx² + dy²
+    mul x21, x19, x19
+    mul x22, x20, x20
+    add x23, x21, x22
+    cmp x23, x16
+    bgt .skip_pixel_circle
+
+    // offset = (y * SCREEN_WIDTH + x) * 4
+    mov x24, x17
+    mov x20, SCREEN_WIDTH
+    mul x24, x24, x20
+    add x24, x24, x18
+    lsl x24, x24, 2
+
+    str w15, [x14, x24]
+
+.skip_pixel_circle:
+    add x18, x18, #1
+    b .loop_x_circle
+
+.next_row_circle:
+    add x17, x17, #1
+    b .loop_y_circle
+
+.end_circle:
+    ldp x19, x20, [sp], #16
+    ret
+
+//---------------------------------------------------------
+// Subrutina: draw_triangle
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = altura
+// x14 = framebuffer base
+// x15 = color
+//---------------------------------------------------------
+
+draw_triangle :
+
+    mov x16, x12  //variable que recorre de arriba hacia abajo y
+    mov x17, x11  //inicio del triangulo en x
+    mov x18, x11 //final del triangulo en x
+    
+
+loop_y_tri :
+    //inicia con la parte superior del triangulo
+    mov x19, x16 //variable que va a pintar los pixeles, coordenada y
+    mov x22, x17 //variable que ca a pintar los pixeles, coordenada x
+
+loop_x_tri :
+    //inicia el recorrido de inzquierda a derecha
+    // Calcular offset
+    mov     x24, x19           // y_actual
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x22      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+
+    // Calculo el offset
+    str     w15, [x14, x24]    // framebuffer[offset] = color
+    mov     x24, x19           // y_actual
+    add     x24, x24, 1
+    mov     x23, SCREEN_WIDTH
+    mul     x24, x24, x23      // y * SCREEN_WIDTH
+    add     x24, x24, x22      // + x_actual
+    lsl     x24, x24, 2        // * 4 (bytes por pixel)
+
+    // Escribir pixel
+    str     w15, [x14, x24]    // framebuffer[offset] = color
+
+    // Incrementar x_actual y continuar
+    
+    cmp x22, x18 //ver si ya llegue al final del triangulo en x
+    add     x22, x22, 1
+    b.ne    loop_x_tri
+
+    //bajar a la fila de abajo
+    add x16, x16, 2
+    sub x17, x17, 1 //inicio triangulo un pixel menos
+    add x18, x18, 1 //final triangulo un pixel mas
+    sub x21, x16, x13
+    cmp x21, x12
+    b.ne loop_y_tri
+    
+    ret
+
+//---------------------------------------------------------
+// Subrutina: draw_tree
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = tamaño
+//---------------------------------------------------------
+
+draw_tree :
+    //guardo direccion para poder saltar a cualquier forma
+    mov x29, x30
+    //guardo datos del arbol para reestablecer luego
+    mov x28, x11
+    mov x27, x12
+    //Primer triangulo
+    mov     x14, x20           // framebuffer base
+
+    bl draw_triangle
+    lsr x25, x13, #1 //mitad del tamaño del triangulo
+    add x12, x12, x25 //proximo triangulo se crea en el medio del triangulo anterior
+    bl draw_triangle
+    add x12, x12, x25 //proximo triangulo se crea en el medio del triangulo anterior
+    bl draw_triangle
+    //Tronco
+    add x12, x12, x13 //el rectangulo comienza en la base del ultimo triangulo
+    mov x14, x25 //tamaño del tronco
+    lsr x13, x25, #1 //un cuarto del tamaño, para un tronco fino
+    lsr x25, x25, #2 // un octavo del tronco, me servira para centrarlo luego
+    sub x11, x11, x25 // con esto el tronco quedará centrado
+    mov x15, x20 //framebuffer base
+    movz    w16, 0x3621, lsl 0     // marron
+	movk    w16, 0x004B, lsl 16    // marron
+    bl draw_rectangle
+    //Reestablezco las variables anteriores
+    mov x30, x29
+    mov x11, x28
+    mov x12, x27
+
+    ret
+    
+
+    // ----------------------------------------------------------
+    // Subrutina: waste_time
+    // ----------------------------------------------------------
+    // Entrada:
+    //   x23 = número de iteraciones a perder
+    // ----------------------------------------------------------
+waste_time:
+    cbz x23, .end_waste         // Si x23 == 0, salir
+    mov x1, x23                 // Copiar contador a x1
+.loop_waste:
+    subs x1, x1, #1            // x1 = x1 - 1 y actualizar flags
+    b.ne .loop_waste           // Si x1 != 0, repetir
+.end_waste:
+    ret
+
+
+
+waste_time_2:
+    mov x29, x30                  // Guardar LR
+
+    cbz x24, end_waste_2          // Si x24 == 0, salir
+
+    mov x2, x24                   // Cantidad de repeticiones
+loop_waste_2:
+    mov x0, x2                    // x0 = índice actual
+    lsl x0, x0, #10               // x0 *= 1024 (más ciclos cuanto más grande x24)
+    bl waste_time                 // pierde x0 ciclos
+    subs x2, x2, #1
+    b.ne loop_waste_2
+
+end_waste_2:
+    mov x30, x29
+    ret
+
