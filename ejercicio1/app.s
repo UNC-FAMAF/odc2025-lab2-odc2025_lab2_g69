@@ -38,7 +38,6 @@ main:
 		mov     x11, #100           // x inicial
 		mov     x12, #50            // y inicial
 		mov     x13, #32            // tamaño del cuadrado
-		mov     x14, x20            // framebuffer base
 		movz    w15, 0xFF00, lsl 0
 		movk    w15, 0x00FF, lsl 16 // amarillo 0x00FFFF00
 
@@ -51,7 +50,6 @@ main:
 		mov     x12, #0        // y inicial
 		mov     x13, #640         // ancho (vertical)
 		mov     x14, #240        // alto (horizontal)
-		mov     x15, x20           // framebuffer base
 		movz    w16, 0x0099, lsl 0     // 0x0000FF00 
 		movk    w16, 0xFF00, lsl 16    // 0xFF00FF00 
 
@@ -66,7 +64,6 @@ main:
 		mov     x12, #350      // y inicial
 		mov     x13, #20   // ancho (vertical)
 		mov     x14, #90       // alto (horizontal)
-		mov     x15, x20           // framebuffer base
 		movz    w16, 0x3300, lsl 0     // 0x0000FF00 
 		movk    w16, 0xFF66, lsl 16    // 0xFF00FF00 
 
@@ -82,7 +79,6 @@ main:
         mov     x11, #150         // x inicial
 		mov     x12, #200          // y inicial
         mov     x13, #200           // altura
-        mov     x14, x20           // framebuffer base
 		movz    w15, 0x0000, lsl 0     // 0x0000FF00 
 		movk    w15, 0x00CC, lsl 16    // 0xFF00FF00 
 
@@ -113,7 +109,6 @@ main:
     mov     x11, #400        // centro x
     mov     x12, #30        // centro y
     mov     x13, #50         // radio
-    mov     x14, x20         // framebuffer base
     movz    w15, 0xFF00, lsl 0
     movk    w15, 0x00FF, lsl 16   // rojo: 0x00FF0000
 
@@ -139,12 +134,12 @@ InfLoop:
 
 //---------------------------------------------------------
 // Subrutina: draw_square
+// Pisa: 16, 17, 18, 19, 21, 22
 //---------------------------------------------------------
 // Entradas:
 // x11 = x inicial
 // x12 = y inicial
 // x13 = tamaño
-// x14 = framebuffer base
 // x15 = color
 //---------------------------------------------------------
 draw_square:
@@ -170,7 +165,7 @@ draw_square:
     lsl     x22, x22, 2         // x22 = offset en bytes (4 bytes por píxel)
 
     // Escribir color en framebuffer[offset]
-    str     w15, [x14, x22]     // framebuffer[offset] = color
+    str     w15, [x20, x22]     // framebuffer[offset] = color
 
     // Incrementar columna actual y decrementar contador horizontal
     add     x19, x19, 1         // x_actual++
@@ -186,13 +181,13 @@ draw_square:
 
 //---------------------------------------------------------
 // Subrutina: draw_rectangle
+// Pisa: 17, 18, 19, 21, 23, 24
 //---------------------------------------------------------
 // Entradas:
 // x11 = x inicial
 // x12 = y inicial
 // x13 = tamaño x
 // x14 = tamaño y
-// x15 = framebuffer base
 // x16 = color
 //---------------------------------------------------------
 
@@ -218,7 +213,7 @@ loop_x_rec:
     lsl     x24, x24, 2        // * 4 (bytes por pixel)
 
     // Escribir pixel
-    str     w16, [x15, x24]    // framebuffer[offset] = color
+    str     w16, [x20, x24]    // framebuffer[offset] = color
 
     // Incrementar x_actual y continuar
     add     x21, x21, 1
@@ -235,12 +230,12 @@ loop_x_rec:
 
 //---------------------------------------------------------
 // Subrutina: draw_circle
+// Pisa: 16, 17, 18, 21 ,22 , 23, 24
 //---------------------------------------------------------
 // Entradas:
 // x11 = centro_x
 // x12 = centro_y
 // x13 = radio
-// x14 = framebuffer base
 // x15 = color
 //---------------------------------------------------------
 
@@ -248,8 +243,8 @@ draw_circle:
     // Guardar registros
     stp x19, x20, [sp, #-16]!
 
-    // r² = x13 * x13
-    mul x16, x13, x13        // x16 = radio²
+    // r**2 = x13 * x13
+    mul x16, x13, x13        // x16 = radio**2
 
     mov x17, #0              // y = 0
 .loop_y_circle:
@@ -279,7 +274,7 @@ draw_circle:
     add x24, x24, x18
     lsl x24, x24, 2
 
-    str w15, [x14, x24]
+    str w15, [x20, x24]
 
 .skip_pixel_circle:
     add x18, x18, #1
@@ -295,12 +290,12 @@ draw_circle:
 
 //---------------------------------------------------------
 // Subrutina: draw_triangle
+// Pisa: 16, 17, 18, 19, 21, 22, 23, 24
 //---------------------------------------------------------
 // Entradas:
 // x11 = x inicial
 // x12 = y inicial
 // x13 = altura
-// x14 = framebuffer base
 // x15 = color
 //---------------------------------------------------------
 
@@ -326,7 +321,7 @@ loop_x_tri :
     lsl     x24, x24, 2        // * 4 (bytes por pixel)
 
     // Calculo el offset
-    str     w15, [x14, x24]    // framebuffer[offset] = color
+    str     w15, [x20, x24]    // framebuffer[offset] = color
     mov     x24, x19           // y_actual
     add     x24, x24, 1
     mov     x23, SCREEN_WIDTH
@@ -335,7 +330,7 @@ loop_x_tri :
     lsl     x24, x24, 2        // * 4 (bytes por pixel)
 
     // Escribir pixel
-    str     w15, [x14, x24]    // framebuffer[offset] = color
+    str     w15, [x20, x24]    // framebuffer[offset] = color
 
     // Incrementar x_actual y continuar
     
@@ -355,6 +350,7 @@ loop_x_tri :
 
 //---------------------------------------------------------
 // Subrutina: draw_tree
+// Pisa: 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 27, 28, 29
 //---------------------------------------------------------
 // Entradas:
 // x11 = x inicial
@@ -369,22 +365,20 @@ draw_tree :
     mov x28, x11
     mov x27, x12
     //Primer triangulo
-    mov     x14, x20           // framebuffer base
 	movz    w15, 0x0000, lsl 0     // verde
 	movk    w15, 0x8F39, lsl 16    // verde
     bl draw_triangle
-    lsr x15, x13, #1 //mitad del tamaño del triangulo
-    add x12, x12, x15 //proximo triangulo se crea en el medio del triangulo anterior
+    lsr x14, x13, #1 //mitad del tamaño del triangulo
+    add x12, x12, x14 //proximo triangulo se crea en el medio del triangulo anterior
     bl draw_triangle
-    add x12, x12, x15 //proximo triangulo se crea en el medio del triangulo anterior
+    add x12, x12, x14 //proximo triangulo se crea en el medio del triangulo anterior
     bl draw_triangle
     //Tronco
     add x12, x12, x13 //el rectangulo comienza en la base del ultimo triangulo
-    mov x14, x15 //tamaño del tronco
-    lsr x13, x15, #1 //un cuarto del tamaño, para un tronco fino
-    lsr x15, x15, #1 // un octavo del tronco, me servira para centrarlo luego
-    sub x11, x11, x15 // con esto el tronco quedará centrado
-    mov x15, x20 //framebuffer base
+    mov x14, x14 //tamaño del tronco
+    lsr x13, x14, #1 //un cuarto del tamaño, para un tronco fino
+    lsr x14, x14, #1 // un octavo del tronco, me servira para centrarlo luego
+    sub x11, x11, x14 // con esto el tronco quedará centrado
     movz    w16, 0x004B, lsl 0     // marron
 	movk    w16, 0x3621, lsl 16    // marron
     bl draw_rectangle
@@ -395,3 +389,85 @@ draw_tree :
 
     ret
     
+//---------------------------------------------------------
+// Subrutina: pixel_triangle {-PRE: altura multiplo de 10-}
+// Pisa: 14, 22, 24, 25, 26, 27
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = altura
+// x16 = color
+//---------------------------------------------------------
+
+pixel_triangle :
+    mov x24, x11  //guardo para no perderlo
+    mov x25, x12  //guardo para no perderlo
+    mov x26, x13 //guardo para no perderlo
+    mov x22, x18 //decrementare esto para saber cuanto falta
+    mov x13, 0x5 //final del triangulo en x
+    mov x14, 0x10 //altura de cada parte del triangulo
+    mov x27, x30 //voy a usar rectangulo, asi que tengo que guardar direccion
+
+loop_y_pixtri :
+    //dibuja una parte del triangulo
+    b draw_rectangle
+
+    //bajar a la fila de abajo
+    sub x11, x11, 0x5  //inicio del proximo rectangulo mas a la izquierda que el anterior
+    add x12, x12, x14  //proximo rectangulo justo debajo del anterior
+    add x13, x13, x14 // final del proximo rectangulo mas a la derecha que el anterior
+    sub x22, x22, x14 //decremento el contador
+    bcnz x22 loop_y_pixtri //me fijo si el contador llego a 0
+    //reestablezco los valores iniciales
+    mov x11, x24
+    mov x12, x25
+    mov x13, x26
+    mov x30, x27
+    
+    ret
+
+//---------------------------------------------------------
+// Subrutina: pixel_tree
+// Pisa 1, 2, 3, 4, 14, 15, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 29
+//---------------------------------------------------------
+// Entradas:
+// x11 = x inicial
+// x12 = y inicial
+// x13 = tamaño
+// x16 = color
+//---------------------------------------------------------
+
+pixel_tree :
+    //guardo direccion para poder saltar a cualquier forma
+    mov x29, x30
+    //guardo datos del arbol para reestablecer luego
+    mov x1, x11
+    mov x2, x12
+    mov x3, x13
+    mov x4, x16
+    //Primer triangulo
+    bl pixel_triangle
+    lsr x15, x13, #1 //mitad del tamaño del triangulo
+    add x12, x12, x15 //proximo triangulo se crea en el medio del triangulo anterior
+    bl pixel_triangle
+    add x12, x12, x15 //proximo triangulo se crea en el medio del triangulo anterior
+    bl pixel_triangle
+    //Tronco
+    add x12, x12, x13 //el rectangulo comienza en la base del ultimo triangulo
+    mov x14, x15 //tamaño del tronco
+    lsr x13, x15, #1 //un cuarto del tamaño, para un tronco fino
+    lsr x15, x15, #1 // un octavo del tronco, me servira para centrarlo luego
+    sub x11, x11, x15 // con esto el tronco quedará centrado
+    movz    w16, 0x004B, lsl 0     // marron
+	movk    w16, 0x3621, lsl 16    // marron
+    bl draw_rectangle
+    //Reestablezco las variables anteriores
+    mov x30, x29
+    mov x11, x1
+    mov x12, x2
+    mov x13, x3
+    mov x16, x4
+
+    ret
+
