@@ -202,9 +202,9 @@ main:
     bl draw_sonic
 */
 InfLoop:
-    mov x5, 500
+    mov x5, 350
     mov x11, 0
-    mov x12, 50
+    mov x12, 60
 // x11 = x inicial
 // x12 = y inicial
 // x15 = color
