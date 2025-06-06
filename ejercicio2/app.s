@@ -18,7 +18,7 @@ main:
     // Pintar fondo de color verde 
     //---------------------------------------------------------
 		
-		movz    w10, 0x6633, lsl 0  
+		movz    w10, 0x6666, lsl 0  
   
         
     
@@ -123,7 +123,7 @@ main:
 
     mov x11, 48   // posicion en x
     mov x12, 270    // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     movk    w15, 0x0033, lsl 16 
 
@@ -137,7 +137,7 @@ main:
 
     mov x11, 75  // posicion en x
     mov x12, 230  // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     
 
@@ -243,7 +243,7 @@ main:
     //---------------------------------------------------------
 
     mov x11, 275  // posicion en x
-    mov x12, 230  // posicion en y 
+    mov x12, 250  // posicion en y 
     mov x13, 30     // tamaño
     movz    w15, 0x6600, lsl 0    
     
@@ -676,7 +676,7 @@ main:
 
     mov x11, 415   // posicion en x
     mov x12, 360    // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x9900, lsl 0    
     
 
@@ -690,7 +690,7 @@ main:
 
     mov x11, 425   // posicion en x
     mov x12, 380   // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     movk    w15, 0x0066, lsl 16 
 
@@ -702,7 +702,7 @@ main:
 
     mov x11, 448   // posicion en x
     mov x12, 340   // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     movk    w15, 0x0033, lsl 16 
 
@@ -716,7 +716,7 @@ main:
 
     mov x11, 475  // posicion en x
     mov x12, 330  // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     
 
@@ -729,7 +729,7 @@ main:
 
     mov x11, 515   // posicion en x
     mov x12, 360    // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x9900, lsl 0    
     
 
@@ -743,7 +743,7 @@ main:
 
     mov x11, 525   // posicion en x
     mov x12, 380   // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     movk    w15, 0x0066, lsl 16 
 
@@ -755,7 +755,7 @@ main:
 
     mov x11, 548   // posicion en x
     mov x12, 340   // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     movk    w15, 0x0033, lsl 16 
 
@@ -769,7 +769,7 @@ main:
 
     mov x11, 575  // posicion en x
     mov x12, 330  // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     
 
@@ -782,7 +782,7 @@ main:
 
     mov x11, 615   // posicion en x
     mov x12, 360    // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x9900, lsl 0    
     
 
@@ -796,7 +796,7 @@ main:
 
     mov x11, 625   // posicion en x
     mov x12, 380   // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     movk    w15, 0x0066, lsl 16 
 
@@ -808,7 +808,7 @@ main:
 
     mov x11, 648   // posicion en x
     mov x12, 340   // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     movk    w15, 0x0033, lsl 16 
 
@@ -822,7 +822,7 @@ main:
 
     mov x11, 675  // posicion en x
     mov x12, 330  // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x6600, lsl 0    
     
 
@@ -837,7 +837,7 @@ main:
 
     mov x11, 45    // posicion en x
     mov x12, 300    // posicion en y 
-    mov x13, 30     // tamaño
+    mov x13, 10     // tamaño
     movz    w15, 0x9900, lsl 0    
     movk    w15, 0x004C, lsl 16 
 
@@ -847,7 +847,7 @@ main:
     // dibujar arbol
     //---------------------------------------------------------
 
-    mov x11, 30     // posicion en x
+    mov x11, 10     // posicion en x
     mov x12, 350    // posicion en y 
     mov x13, 50     // tamaño
     movz    w15, 0x6600, lsl 0     // marron
@@ -856,6 +856,7 @@ main:
 
 
 
+    bl draw_odc
 
 
 
@@ -867,6 +868,8 @@ main:
     ldr     w10, [x9, GPIO_GPLEV0]
     and     w11, w10, 0b10
     lsr     w11, w11, 1
+
+
 
     // inicializamos la ariable que vamos usar para la animacion 
 
@@ -969,11 +972,11 @@ InfLoop:
         bl      draw_rectangle
 		
 
-                //---------------------------------------------------------
+        //---------------------------------------------------------
 		// Dibujar rectangulo blanco (nube)
 		//---------------------------------------------------------
 		mov     x11, x26          // x inicial
-		mov     x12, #100        // y inicial
+		mov     x12, #30        // y inicial
 		mov     x13, #60         // ancho (vertical)
 		mov     x14, #20       // alto (horizontal)
 		mov     x15, x20           // framebuffer base
@@ -1167,7 +1170,7 @@ loop_x_rec:
     lsl     x24, x24, 2        // * 4 (bytes por pixel)
 
     // Escribir pixel
-    str     w16, [x15, x24]    // framebuffer[offset] = color
+    str     w16, [x20, x24]    // framebuffer[offset] = color
 
     // Incrementar x_actual y continuar
     add     x21, x21, 1
@@ -1342,7 +1345,7 @@ draw_tree :
     mov x12, x27
 
     ret
-    
+   
 
     // ----------------------------------------------------------
     // Subrutina: waste_time
@@ -1378,3 +1381,341 @@ end_waste_2:
     mov x30, x29
     ret
 
+draw_odc:
+
+mov x29, x30
+//----------------------------------------------------------------------------------
+//-----  ODC 2025
+//----------------------------------------------------------------------------------
+
+    //---------------------------------------------------------
+    // Dibujar letra O 
+    //---------------------------------------------------------
+
+	// Dibuja la linea mas a la izquierda
+	mov     x11, #30         // x inicial
+	mov     x12, #350      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #60       // alto (vertical)
+	mov     x15, x20           // framebuffer base
+	movz    w16, 0x00A2, lsl 0     // 0x0000FF00 #
+	movk    w16, 0x9BFE, lsl 16    // 0xFF00FF00 
+
+	bl      draw_rectangle
+	
+	// Dibuja la parte superior de la O
+	mov     x11, #30         // x inicial
+	mov     x12, #350      // y inicial
+	mov     x13, #45   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+
+	// Dibuja la parte mas a la derecha de la  O 
+	mov     x11, #75         // x inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #60       // alto (vertical)
+
+	bl      draw_rectangle
+
+	// Dibuja la parte inferior de la O
+	mov     x11, #35         // x inicial
+	mov     x12, #400      // y inicial
+	mov     x13, #50   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+
+	//---------------------------------------------------------
+    // Dibujar letra D
+    //---------------------------------------------------------
+	
+	// Dibuja la parte mas a la izquieda de la D
+	mov     x11, #95         // x inicial
+	mov     x12, #350      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #60       // alto (vertical)
+
+	bl      draw_rectangle
+	
+	// Dibuja los pixeles de la "panza" (arriba)
+	mov     x13, #30   // ancho (horizontal)
+	mov     x14, #10      // alto (vertical)
+
+	bl      draw_rectangle
+	
+	// Dibuja los pixeles de la "panza" (abajo)
+	mov     x12, #400      // y inicial
+
+	bl      draw_rectangle
+
+	//-----------------------------------------------------
+	// OJO, ESTE PEDACITO DIBUJA UN PIXEL, PUEDE SERVIR!!
+	//-----------------------------------------------------
+	// Dibuja UN pixel de la "panza" (abajo)
+
+	mov     x11, #125         // x inicial
+	mov     x12, #390      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+
+	bl      draw_rectangle
+
+
+	// Dibuja UN pixel de la "panza" (arriba)
+	
+	mov     x12, #360      // y inicial
+
+	bl      draw_rectangle
+
+
+	// Cierra la "panza" de la D
+	mov     x12, #370      // y inicial
+	mov     x14, #20      // alto (vertical)
+
+	bl      draw_rectangle
+
+
+
+	//---------------------------------------------------------
+    // Dibujar letra C
+    //---------------------------------------------------------
+
+    // Dibuja el palito vertical de la C
+
+	mov     x11, #145         // x inicial
+	mov     x12, #350      // y inicial
+	mov     x14, #60       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Dibuja la linea de arriba
+    mov     x11, #145         // x inicial
+	mov     x13, #42   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+    
+    // Dibuja la linea de abajo
+    mov     x11, #145         // x inicial
+	mov     x12, #400      // y inicial
+
+    bl draw_rectangle
+
+
+    //---------------------------------------------------------
+    // Dibujar número 2
+    //---------------------------------------------------------
+
+
+    //Primer pixel del 2
+
+    mov     x11, #10         // x inicial
+	mov     x12, #430      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Cabeza del 2
+
+    mov     x11, #20         // x inicial
+	mov     x12, #420      // y inicial
+	mov     x13, #30   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Costado derecho de la cabeza
+
+    mov     x11, #40         // x inicial
+	mov     x12, #420      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #30       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Parte media del 2
+    mov     x11, #10         // x inicial
+	mov     x12, #450      // y inicial
+	mov     x13, #30   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Patita izquierda del 2 
+   
+    mov     x11, #10         // x inicial
+	mov     x12, #460      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #20       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Linea final (piso) 
+
+    mov     x11, #20         // x inicial
+	mov     x12, #470      // y inicial
+	mov     x13, #30   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+
+    //---------------------------------------------------------
+    // Dibujar número 0 
+    //---------------------------------------------------------
+
+    // Dibuja la linea mas a la izquierda
+	mov     x11, #55         // x inicial
+	mov     x12, #420      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #60       // alto (vertical)
+    
+    bl      draw_rectangle
+
+    // Dibuja la parte superior del 0
+	mov     x11, #55         // x inicial
+	mov     x12, #420      // y inicial
+	mov     x13, #45   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+
+	// Dibuja la parte mas a la derecha del 0 
+	mov     x11, #90         // x inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #60       // alto (vertical)
+
+	bl      draw_rectangle
+
+	// Dibuja la parte inferior del 0
+	mov     x11, 55         // x inicial
+	mov     x12, #470      // y inicial
+	mov     x13, #45   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+
+    //---------------------------------------------------------
+    // Dibujar número 2 
+    //---------------------------------------------------------
+
+    //Primer pixel del 2
+
+    mov     x11, #110         // x inicial
+	mov     x12, #430      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Cabeza del 2
+
+    mov     x11, #120         // x inicial
+	mov     x12, #420      // y inicial
+	mov     x13, #30   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Costado derecho de la cabeza
+
+    mov     x11, #140         // x inicial
+	mov     x12, #420      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #30       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Parte media del 2
+    mov     x11, #110         // x inicial
+	mov     x12, #450      // y inicial
+	mov     x13, #30   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Patita izquierda del 2 
+   
+    mov     x11, #110         // x inicial
+	mov     x12, #460      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #20       // alto (vertical)
+
+    bl draw_rectangle
+
+    // Linea final (piso) 
+
+    mov     x11, #120         // x inicial
+	mov     x12, #470      // y inicial
+	mov     x13, #30   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+    bl draw_rectangle
+
+
+    //---------------------------------------------------------
+    // Dibujar número 5 
+    //---------------------------------------------------------
+
+
+   
+
+    // Dibujo la cabeza del 5
+
+    mov     x11, #160        // x inicial
+	mov     x12, #420      // y inicial
+	mov     x13, #40   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+   
+   // Dibujo la bajada de la cabeza del 5
+    mov     x11, #160        // x inicial
+	mov     x12, #420      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #25       // alto (vertical)
+
+	bl      draw_rectangle
+
+    // Parte media del 5
+    mov     x11, #170        // x inicial
+	mov     x12, #445      // y inicial
+	mov     x13, #20   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+
+    // Bajada a la panza del 5
+
+    mov     x11, #190        // x inicial
+	mov     x12, #455      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #20       // alto (vertical)
+
+	bl      draw_rectangle
+
+    // Panza del 5
+
+    mov     x11, #175        // x inicial
+	mov     x12, #470      // y inicial
+	mov     x13, #20   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+
+    // Piso del 5
+
+    mov     x11, #165        // x inicial
+	mov     x12, #470      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+
+    mov     x12, #470      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
+
+	bl      draw_rectangle
+    mov x30,x29
+ret 
