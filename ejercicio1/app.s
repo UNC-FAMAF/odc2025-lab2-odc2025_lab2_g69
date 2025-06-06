@@ -855,6 +855,8 @@ main:
     bl draw_tree 
 
 
+    bl draw_odc
+
 
 
 
@@ -1151,6 +1153,13 @@ draw_tree :
     mov x11, x28
     mov x12, x27
 
+    ret
+    
+draw_odc:
+
+mov x29, x30
+//----------------------------------------------------------------------------------
+//-----  ODC 2025
 //----------------------------------------------------------------------------------
 //-----  ODC 2025
 //----------------------------------------------------------------------------------
@@ -1424,6 +1433,9 @@ draw_tree :
     // Dibujar número 5 
     //---------------------------------------------------------
 
+
+   
+
     // Dibujo la cabeza del 5
 
     mov     x11, #160        // x inicial
@@ -1476,12 +1488,10 @@ draw_tree :
 
 	bl      draw_rectangle
 
-InfLoop:
-    b       InfLoop
+    mov     x12, #470      // y inicial
+	mov     x13, #10   // ancho (horizontal)
+	mov     x14, #10       // alto (vertical)
 
-
-    ret
-
-    
-    
-
+	bl      draw_rectangle
+    mov x30,x29
+ret 
