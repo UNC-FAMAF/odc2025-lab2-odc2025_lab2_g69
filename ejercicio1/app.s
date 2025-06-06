@@ -194,11 +194,12 @@ main:
     bl nube
    
     //---------------------------------------------------------
-    // Dibujar Sonix
+    // Dibujar Sonic
     //---------------------------------------------------------
 	mov     x11, #100          // x inicial
 	mov     x12, #350          // y inicial
 	mov     x13, x20           // framebuffer base
+
     bl draw_sonic
 
 InfLoop:
@@ -1147,7 +1148,7 @@ draw_sonic:
                 add     x12, x12, #34
                 mov     x13, #50           // ancho (vertical)
                 mov     x14, #60           // alto (horizontal)
-                mov     x15, x27           // framebuffer base
+                mov     x20, x27           // framebuffer base
                 movz    w16, 0x9900, lsl 0     // 0x0000FF00 
 
                 bl      draw_rectangle
@@ -1393,6 +1394,7 @@ draw_sonic:
                     add     x12, x12, #20
                     mov     x13, #17           // ancho (horizontal)
                     mov     x14, #8           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0xFFFF, lsl 0
                     movk    w16, 0x00FF, lsl 16    // 0x00FFFFFF
 
@@ -1514,11 +1516,11 @@ draw_sonic:
                 add     x11, x11, #48
                 mov     x12, x26           // y inicial
                 add     x12, x12, #26
-                mov     x13, #15           // ancho (horizontal)
-                mov     x14, #7           // alto (vertical)
+                mov     x13, #15           // ancho (vertical)
+                mov     x14, #7           // alto (horizontal)
+                mov     x20, x27
                 movz    w16, 0xA523, lsl 0
                 movk    w16, 0x00E6, lsl 16  
-
                 bl      draw_rectangle
                     
                 mov      x11, x25
@@ -1559,6 +1561,7 @@ draw_sonic:
                 add     x12, x12, #28
                 mov     x13, #2           // ancho (horizontal)
                 mov     x14, #2           // alto (vertical)
+                mov     x20, x27
                 movz    w16, 0x0, lsl 0  
 
                 bl      draw_rectangle
@@ -1578,6 +1581,8 @@ draw_sonic:
                 add     x12, x12, #28
                 mov     x13, #2           // ancho (horizontal)
                 mov     x14, #2           // alto (vertical)
+                mov     x20, x27
+
                 movz    w16, 0x0, lsl 0  
 
                 bl      draw_rectangle
@@ -1590,6 +1595,7 @@ draw_sonic:
                     sub     x12, x12, #8
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #16           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0x0, lsl 0
                     bl      draw_rectangle
 
@@ -1599,6 +1605,7 @@ draw_sonic:
                     sub     x12, x12, #8
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #14           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0x0, lsl 0  
                     bl      draw_rectangle
 
@@ -1608,6 +1615,7 @@ draw_sonic:
                     sub     x12, x12, #6
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #10           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0x0, lsl 0  
                     bl      draw_rectangle
 
@@ -1617,6 +1625,7 @@ draw_sonic:
                     sub     x12, x12, #4
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #4           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0x0, lsl 0  
                     bl      draw_rectangle
 
@@ -1626,6 +1635,7 @@ draw_sonic:
                     sub     x12, x12, #8
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #2           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0x0, lsl 0
                     bl      draw_rectangle
 
@@ -1635,6 +1645,7 @@ draw_sonic:
                     sub     x12, x12, #6
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #2           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0x0, lsl 0
                     bl      draw_rectangle
 
@@ -1644,6 +1655,7 @@ draw_sonic:
                     sub     x12, x12, #4
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #2           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0x0, lsl 0
                     bl      draw_rectangle
 
@@ -1653,6 +1665,7 @@ draw_sonic:
                     sub     x12, x12, #2
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #2           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0x0, lsl 0
                     bl      draw_rectangle
 
@@ -1663,6 +1676,7 @@ draw_sonic:
                     sub     x12, x12, #6
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #12           // alto (vertical)
+                    mov     x20, x27
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16  
 
@@ -1675,8 +1689,9 @@ draw_sonic:
                     mov     x14, #10           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16  
-
+                    mov     x20, x27
                     bl      draw_rectangle
+
                     mov     x11, x25           // x inicial
                     add     x11, x11, #32
                     mov     x12, x26           // y inicial
@@ -1685,6 +1700,7 @@ draw_sonic:
                     mov     x14, #4           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16  
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1695,6 +1711,7 @@ draw_sonic:
                     mov     x14, #10           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16  
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1705,6 +1722,7 @@ draw_sonic:
                     mov     x14, #4           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1715,6 +1733,7 @@ draw_sonic:
                     mov     x14, #2           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16  
+                    mov     x20, x27
                     bl      draw_rectangle
             // oreja-der
                 // ---contorno
@@ -1725,6 +1744,7 @@ draw_sonic:
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #4           // alto (vertical)
                     movz    w16, 0x0, lsl 0
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1734,6 +1754,7 @@ draw_sonic:
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #6           // alto (vertical)
                     movz    w16, 0x0, lsl 0
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1743,6 +1764,7 @@ draw_sonic:
                     mov     x13, #4           // ancho (horizontal)
                     mov     x14, #2           // alto (vertical)
                     movz    w16, 0x0, lsl 0
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1752,6 +1774,7 @@ draw_sonic:
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #16           // alto (vertical)
                     movz    w16, 0x0, lsl 0
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1761,6 +1784,7 @@ draw_sonic:
                     mov     x13, #2           // ancho (horizontal)
                     mov     x14, #8           // alto (vertical)
                     movz    w16, 0x0, lsl 0
+                    mov     x20, x27
                     bl      draw_rectangle
                 // ---piel
                     mov     x11, x25           // x inicial
@@ -1771,6 +1795,7 @@ draw_sonic:
                     mov     x14, #4           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1781,6 +1806,7 @@ draw_sonic:
                     mov     x14, #10           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1791,6 +1817,7 @@ draw_sonic:
                     mov     x14, #14           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16
+                    mov     x20, x27
                     bl      draw_rectangle
 
                     mov     x11, x25           // x inicial
@@ -1801,6 +1828,7 @@ draw_sonic:
                     mov     x14, #8           // alto (vertical)
                     movz    w16, 0xA523, lsl 0
                     movk    w16, 0x00E6, lsl 16
+                    mov     x20, x27
                     bl      draw_rectangle
         //      brazos
             // brazo izquierdo
