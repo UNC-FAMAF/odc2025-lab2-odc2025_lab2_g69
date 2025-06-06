@@ -1,20 +1,15 @@
     .equ SCREEN_WIDTH,      640
     .equ SCREEN_HEIGH,      480
 
-.global draw_sonic
+    .global draw_sonic
 
 
 draw_sonic:
         mov x25, x11 //guardo el x inicial
         mov x26, x12 //guardo el y inicial
         mov x27, x13 //guardo el frame buffer
-        //---------------------------------------------------------
-		// Dibujar sonic
-		//---------------------------------------------------------
-		//mov     x11, #230          // x inicial
-		//mov     x12, #300          // y inicial
-		//mov     x13, x20           // framebuffer base
-
+        sub sp, sp, #8
+        str x30, [sp, #0]
         //      picos
             //      pico 1
                 mov      x11, x25
@@ -116,7 +111,6 @@ draw_sonic:
                 movz    w16, 0x9900, lsl 0     // 0x0000FF00 
 
                 bl      draw_rectangle
-
         //      pecho
             //      cuerpito
                 mov      x11, x25
@@ -624,23 +618,13 @@ draw_sonic:
                 add      x11, x11, #37
                 mov      x12, x26
                 add      x12, x12, #50
-                mov     x13, #3             // radio
+                mov     x13, #2             // radio
                 mov     x14, x27             // framebuffer base
                 movz    w15, 0xA523, lsl 0
                 movk    w15, 0x00E6, lsl 16  
 
                 bl      draw_circle
 
-                mov      x11, x25
-                add      x11, x11, #34
-                mov      x12, x26
-                add      x12, x12, #70
-                mov     x13, #5             // radio
-                mov     x14, x27             // framebuffer base
-                movz    w15, 0xFFFF, lsl 0
-                movk    w15, 0x0099, lsl 16  
-
-                bl      draw_circle
 
                 //loop brazp
                     mov     x28, #0
@@ -653,20 +637,29 @@ draw_sonic:
                     add     x13, x13, #32
                     mov     x14, x26           // y final
                     add     x14, x14, #68
-                    
-                    mov     x15, x27           // framebuffer base
-                    movz    w16, 0xA523, lsl 0
-                    movk    w16, 0x00E6, lsl 16    // 0x00FFFFFF
+                    movz    w15, 0xA523, lsl 0
+                    movk    w15, 0x00E6, lsl 16    // 0x00FFFFFF
 
                     add     x11, x11, x28
                     add     x13, x13, x28
                     add     x28, x28, #1
 
-                    bl      draw_line_y
+                    bl      draw_line
 
                     cmp     x28, #4
 
                     b.ne    loop_arm1
+
+                mov      x11, x25
+                add      x11, x11, #34
+                mov      x12, x26
+                add      x12, x12, #70
+                mov     x13, #5             // radio
+                mov     x14, x27             // framebuffer base
+                movz    w15, 0xFFFF, lsl 0
+                movk    w15, 0x00FF, lsl 16  
+
+                bl      draw_circle
 
             // brazo derecho
                 mov      x11, x25
@@ -690,21 +683,19 @@ draw_sonic:
                     add     x13, x13, #68
                     mov     x14, x26           // y final
                     add     x14, x14, #70
-                    
-                    mov     x15, x27           // framebuffer base
-                    movz    w16, 0xA523, lsl 0
-                    movk    w16, 0x00E6, lsl 16    // 0x00FFFFFF
+                    movz    w15, 0xA523, lsl 0
+                    movk    w15, 0x00E6, lsl 16    // 0x00FFFFFF
 
                     add     x11, x11, x28
                     add     x13, x13, x28
                     add     x28, x28, #1
 
-                    bl      draw_line_y
+                    bl      draw_line
 
                     cmp     x28, #4
 
                     b.ne    loop_arm
-// mano
+            // mano
                 mov      x11, x25
                 add      x11, x11, #70
                 mov      x12, x26
@@ -714,175 +705,162 @@ draw_sonic:
                 movz    w15, 0xFFFF, lsl 0
                 movk    w15, 0x00FF, lsl 16  
                 bl      draw_circle
+        //      piernas
+            //  pierna izq
+
+                mov     x28, #0
+                loop_leg1:  
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #66
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #55
+                    mov     x13, x25           // x final
+                    add     x13, x13, #46
+                    mov     x14, x26           // y final
+                    add     x14, x14, #78
+                    movz    w15, 0x3B5, lsl 0
+                    movk    w15, 0x003, lsl 16 
+
+                    add     x11, x11, x28
+                    add     x13, x13, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+
+                    cmp     x28, #4
+
+                    b.ne    loop_leg1
+
                 
-                
-
-        ret
-
-
-//-----------------------------------
-//sub rutina trazar linea
-//-----------------------------------
-
-// Entradas:
-// x11 = x1 inicial
-// x12 = y1 inicial
-// x13 = x2 final
-// x14 = y2 final
-// x15 = framebuffer base
-// x16 = color
-//---------------------------------------------------------
-
-// draw_line :
-    sub x17, x11, x13 // dx = x1 - x2 (distancia entre ambos x)
-    sub x18, x12, x14 // dy = y1 - y2 (distancia entre ambos y)
-    
-    // D inicial
-        add x19, x18, x18 // D = 2*dy
-        sub x19, x19, x17 // D = 2*dy-dx
-    
-loop:
-    mov     x24, x12           // y_actual
-    mov     x23, SCREEN_WIDTH
-    mul     x24, x24, x23      // y * SCREEN_WIDTH
-    add     x24, x24, x21      // + x_actual
-    lsl     x24, x24, 2        // * 4 (bytes por pixel)
-    str     w16, [x15, x24]    // framebuffer[offset] = color
-
-
+    ldr x30, [sp, #0]
+    add sp, sp, #8
     ret
-// Entradas: x1, y1, x2, y2 en X11, X12, X13, X14
-//!draw_line:
-draw_line_x:
-    SUB X4, X13, X11        // dx = x2 - x1
-    SUB X5, X14, X12        // dy = y2 - y1
-
-    LSL X6, X5, #1        // 2*dy
-    SUB X7, X6, X4        // D = 2*dy - dx
-
-    MOV X8, X11            // x = x1
-    MOV X9, X12            // y = y1
-
-loop_start:
-    MOV X10, X8
-    MOV X11, X9
-
-    mov     x24, x9           // y_actual
-    mov     x23, SCREEN_WIDTH
-    mul     x24, x24, x23      // y * SCREEN_WIDTH
-    add     x24, x24, x8      // + x_actual
-    lsl     x24, x24, 2        // * 4 (bytes por pixel)
-    str     w16, [x15, x24]
-    
-
-    CMP X8, X13
-    B.EQ loop_end
-
-    ADD X8, X8, #1        // x++
-    CMP X7, #0
-    BLE skip_y_inc
-
-    ADD X9, X9, #1        // y++
-    lsl x4, x4, #1
-    SUB X7, X7, X4  // D = D - 2*dx
-
-skip_y_inc:
-    ADD X7, X7, X6        // D = D + 2*dy
-    B loop_start
-
-loop_end:
-    RET
-
-draw_line_y:
-        cmp     x13, x11
-        b.le    start_11
-
-start_00:
-        SUB X4, X13, X11        // dx = x2 - x1
-        SUB X5, X14, X12        // dy = y2 - y1
-
-        LSL X6, X4, #1        // 2*dx
-        SUB X7, X6, X5        // D = 2*dx - dy
-
-        MOV X8, X11            // x = x1
-        MOV X9, X12            // y = y1
-
-    y_start_0:
-            MOV X0, X8
-            MOV X1, X9
-
-            mov     x24, x9           // y_actual
-            mov     x23, SCREEN_WIDTH
-            mul     x24, x24, x23      // y * SCREEN_WIDTH
-            add     x24, x24, x8      // + x_actual
-            lsl     x24, x24, 2        // * 4 (bytes por pixel)
-            str     w16, [x15, x24]
-
-            CMP X9, X14
-            B.EQ end_0
-
-            ADD X9, X9, #1        // y++
-
-            CMP X7, #0
-            BLE skip_x0
-
-            ADD X8, X8, #1        // x++
-            SUB X7, X7, X5, LSL #1  // D -= 2*dy
-
-        skip_x0:
-            ADD X7, X7, X6        // D += 2*dx
-            B y_start_0
-
-        end_0:
-            RET
-
-start_11:
-        SUB X4, X11, X13       // dx = x1 - x2
-        SUB X5, X12, X14        // dy = y1 - y2
-
-        LSL X6, X4, #1        // 2*dx
-        sub X7, X6, X5        // D = 2*dx + dy
-
-        MOV X8, X11            // x = x1
-        MOV X9, X12            // y = y1
 
 
-    y_start_1:
-            MOV X0, X8
-            MOV X1, X9
-
-            mov     x24, x9           // y_actual
-            mov     x23, SCREEN_WIDTH
-            mul     x24, x24, x23      // y * SCREEN_WIDTH
-            add     x24, x24, x8      // + x_actual
-            lsl     x24, x24, 2        // * 4 (bytes por pixel)
-            str     w16, [x15, x24]
-
-            CMP X9, X14
-            B.EQ end_1
-
-            ADD X9, X9, #1        // y++
-
-            CMP X7, #0
-            BLE skip_x1
-
-            // D > 0
-            SUB X8, X8, #1            // x--
-            LSL X5, X5, #1            // 2*dy
-            LSL X6, X4, #1            // 2*dx
-            SUB X7, X7, X5            // D -= 2*dy
-            ADD X7, X7, X6            // D += 2*dx
-            B y_start_1
-
-            skip_x1:
-            LSL X6, X4, #1            // 2*dx
-            ADD X7, X7, X6            // D += 2*dx
-            B y_start_1
-
-        end_1:
-            RET
+// ------------------------
+// subrutina draw_line
+// ------------------------
+// x11, xa \  punto a
+// x12, ya /
+// x13, xb \  punto b
+// x14, yb /
+// x15, color
+// x27 framebuffer base
 
 
+draw_line:
+
+    stp x29, x30, [sp, #-16]!   // Guardar x29 (frame pointer) y x30 en la pila
+    mov x29, sp                 // (opcional, si usás stack frames)
+
+    SUB     x16, x13, x11    // dx = |xb - xa|
+    mov     x0, x16
+    bl      abs
+    mov     x16, x0
+
+    SUB     x17, x14, x12    // dy = |yb - ya|
+    mov     x0, x17
+    bl      abs
+    mov     x17, x0
+
+    mov x18, #1         // sx = xa < xb? 1 : -1
+    CMP x11, x13
+    b.lt finx
+    mov x18, #-1
+finx:    
+
+    mov x19, #1         // sy = ya < yb ? 1 : -1
+    CMP x12, x14
+    b.lt finy
+    mov x19, #-1
+finy:    
+
+
+    MOV x20, x11       // x = x1
+    MOV x21, x12       // y = y1
+
+    CMP x16, x17        // dx > dy?
+    BGE pend_low     // pendiente <= 1
+    B   pend_high   // pendiente > 1
+
+// --- pendiente <= 1 ---
+pend_low:
+    LSL x1, x16, #1        // 2*dx
+    LSL x22, x17, #1        // 2*dy
+    SUB x23, x22, x16       // D = 2*dy - dx
+
+pend_low_loop:
+    mov     x24, x21           // y_actual
+    mov     x0, SCREEN_WIDTH
+    mul     x24, x24, x0      // y * SCREEN_WIDTH
+    add     x24, x24, x20      // + x_actual
+    lsl     x24, x24, #2        // * 4 (bytes por pixel)
+    str     w15, [x27, x24]    // framebuffer[offset] = color
+
+
+    CMP x20, x13
+    cset x2, eq
+    CMP x21, x14
+    cset x3, eq
+    and x2, x2, x3
+    cbz x2, cont_low_loop
+    B return             // if (x actual == xb && y actual == yb) {termina}
+
+cont_low_loop:
+
+    CMP x23, #0
+    BLT skip_y
+    ADD x21, x21, x19       // y += sy
+    SUB x23, x23, x1   // D -= 2*dx
+skip_y:
+    ADD x23, x23, x22      // D += 2*dy
+    ADD x20, x20, x18       // x += sx
+    B pend_low_loop
+
+// --- pendiente > 1 ---
+pend_high:
+    LSL x1, x17, #1        // 2*dy
+    LSL x22, x16, #1        // 2*dx
+    SUB x23, x22, x17       // D = 2*dx - dy
+
+pend_high_loop:
+    mov     x24, x21           // y_actual
+    mov     x0, SCREEN_WIDTH
+    mul     x24, x24, x0      // y * SCREEN_WIDTH
+    add     x24, x24, x20      // + x_actual
+    lsl     x24, x24, #2        // * 4 (bytes por pixel)
+    str     w15, [x27, x24]    // framebuffer[offset] = color
 
     
+    CMP x20, x13
+    cset x2, eq
+    CMP x21, x14
+    cset x3, eq
+    and x2, x2, x3
+    cbz x2, cont_high_loop
+    B return             // if (x actual == xb && y actual == yb) {termina}
+
+cont_high_loop:
+
+    CMP x23, #0
+    BLT skip_x
+    ADD x20, x20, x18       // x += sx
+    SUB x23, x23, x1        // D -= 2*dy
+skip_x:
+    ADD x23, x23, x22       // D += 2*dx
+    ADD x21, x21, x19       // y += sy
+    B pend_high_loop
+
+return:
+    
+    ldp x29, x30, [sp], #16     // Restaurar x29 y x30
+    ret
+
+// valor absoluto
+    abs:
+        cmp x0, #0
+        bge  fin
+        sub x0, xzr, x0
+    fin:
+        ret
 
