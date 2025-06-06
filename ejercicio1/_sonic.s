@@ -102,7 +102,7 @@ draw_sonic:
                 bl      draw_circle
 
                 mov     x11, x25           // x inicial
-                add     x11, x11, #46
+                add     x11, x11, #45
                 mov     x12, x26           // y inicial
                 add     x12, x12, #34
                 mov     x13, #50           // ancho (vertical)
@@ -131,8 +131,186 @@ draw_sonic:
                 mov     x14, x27             // framebuffer base
                 movz    w15, 0x3B5, lsl 0
                 movk    w15, 0x003, lsl 16  
-            //     piel
                 bl      draw_circle
+
+        //      piernas
+            //  pierna izq
+
+                mov     x28, #0
+                loop_leg1:  
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #42
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #66
+                    mov     x13, x25           // x final
+                    add     x13, x13, #36
+                    mov     x14, x26           // y final
+                    add     x14, x14, #100
+                    movz    w15, 0x3B5, lsl 0
+                    movk    w15, 0x003, lsl 16 
+
+                    add     x11, x11, x28
+                    add     x13, x13, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+
+                    cmp     x28, #6
+
+                    b.ne    loop_leg1
+
+                //    pie 1
+                    mov     x28, #0
+                loop_foot0:
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #35
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #100
+                    mov     x13, x25           // x final
+                    add     x13, x13, #29
+                    mov     x14, x26           // y final
+                    add     x14, x14, #107
+                    movz    w15, 0x00FF, lsl 16
+
+                    add     x11, x11, x28
+                    add     x13, x13, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+                    cmp     x28, #4
+
+                    b.ne    loop_foot0
+
+                    mov     x28, #0
+                loop_foot01:
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #41
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #100
+                    mov     x13, x25           // x final
+                    add     x13, x13, #29
+                    mov     x14, x26           // y final
+                    add     x14, x14, #108
+                    movz    w15, 0x00FF, lsl 16
+
+                    add     x12, x12, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+                    cmp     x28, #8
+
+                    b.ne    loop_foot01
+
+                    mov     x28, #0
+                loop_foot1:
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #35
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #98
+                    mov     x13, x25           // x final
+                    add     x13, x13, #42
+                    mov     x14, x26           // y final
+                    add     x14, x14, #99
+                    movz    w15, 0x00FF, lsl 16
+                    movk    w15, 0xFFFF, lsl 0
+
+                    add     x12, x12, x28
+                    add     x14, x14, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+                    cmp     x28, #4
+
+                    b.ne    loop_foot1
+            //  pierna derecha
+                    mov     x28, #0
+                loop_leg2:  
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #52
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #66
+                    mov     x13, x25           // x final
+                    add     x13, x13, #58
+                    mov     x14, x26           // y final
+                    add     x14, x14, #100
+                    movz    w15, 0x3B5, lsl 0
+                    movk    w15, 0x003, lsl 16 
+
+                    add     x11, x11, x28
+                    add     x13, x13, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+
+                    cmp     x28, #6
+
+                    b.ne    loop_leg2
+
+                //    pie 2
+                    mov     x28, #0
+                loop_foot2:
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #60
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #100
+                    mov     x13, x25           // x final
+                    add     x13, x13, #64
+                    mov     x14, x26           // y final
+                    add     x14, x14, #107
+                    movz    w15, 0x00FF, lsl 16
+
+                    add     x11, x11, x28
+                    add     x13, x13, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+                    cmp     x28, #4
+
+                    b.ne    loop_foot2
+
+                    mov     x28, #0
+                loop_foot21:
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #58
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #100
+                    mov     x13, x25           // x final
+                    add     x13, x13, #71
+                    mov     x14, x26           // y final
+                    add     x14, x14, #108
+                    movz    w15, 0x00FF, lsl 16
+
+                    add     x12, x12, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+                    cmp     x28, #8
+
+                    b.ne    loop_foot21
+
+                    mov     x28, #0
+                loop_foot3:
+                    mov     x11, x25           // x inicial
+                    add     x11, x11, #64
+                    mov     x12, x26           // y inicial
+                    add     x12, x12, #98
+                    mov     x13, x25           // x final
+                    add     x13, x13, #57
+                    mov     x14, x26           // y final
+                    add     x14, x14, #99
+                    movz    w15, 0x00FF, lsl 16
+                    movk    w15, 0xFFFF, lsl 0
+
+                    add     x12, x12, x28
+                    add     x14, x14, x28
+                    add     x28, x28, #1
+
+                    bl      draw_line
+                    cmp     x28, #4
+
+                    b.ne    loop_foot3
+
+            //     piel
 
                 mov      x11, x25
                 add      x11, x11, #52
@@ -705,32 +883,6 @@ draw_sonic:
                 movz    w15, 0xFFFF, lsl 0
                 movk    w15, 0x00FF, lsl 16  
                 bl      draw_circle
-        //      piernas
-            //  pierna izq
-
-                mov     x28, #0
-                loop_leg1:  
-                    mov     x11, x25           // x inicial
-                    add     x11, x11, #66
-                    mov     x12, x26           // y inicial
-                    add     x12, x12, #55
-                    mov     x13, x25           // x final
-                    add     x13, x13, #46
-                    mov     x14, x26           // y final
-                    add     x14, x14, #78
-                    movz    w15, 0x3B5, lsl 0
-                    movk    w15, 0x003, lsl 16 
-
-                    add     x11, x11, x28
-                    add     x13, x13, x28
-                    add     x28, x28, #1
-
-                    bl      draw_line
-
-                    cmp     x28, #4
-
-                    b.ne    loop_leg1
-
                 
     ldr x30, [sp, #0]
     add sp, sp, #8

@@ -13,58 +13,59 @@ LOAD app.o
 LOAD start.o
                 0x0000000000080000                . = 0x80000
 
-.text           0x0000000000080000    0x90ed0
+.text           0x0000000000080000    0x91094
  *(.text.boot)
  .text.boot     0x0000000000080000    0x100c8 start.o
                 0x0000000000080000                _start
  *(.text*)
- .text          0x00000000000900c8      0xa80 _sonic.o
+ .text          0x00000000000900c8      0xc44 _sonic.o
                 0x00000000000900c8                draw_sonic
- .text          0x0000000000090b48      0x388 app.o
-                0x0000000000090b48                main
-                0x0000000000090c4c                draw_square
-                0x0000000000090c90                draw_rectangle
-                0x0000000000090cd4                draw_circle
-                0x0000000000090d40                draw_triangle
- .text          0x0000000000090ed0    0x80000 start.o
+ .text          0x0000000000090d0c      0x388 app.o
+                0x0000000000090d0c                main
+                0x0000000000090e10                draw_square
+                0x0000000000090e54                draw_rectangle
+                0x0000000000090e98                draw_circle
+                0x0000000000090f04                draw_triangle
+ .text          0x0000000000091094    0x80000 start.o
 
-.iplt           0x0000000000110ed0        0x0
- .iplt          0x0000000000110ed0        0x0 _sonic.o
+.iplt           0x0000000000111094        0x0
+ .iplt          0x0000000000111094        0x0 _sonic.o
 
-.rela.dyn       0x0000000000110ed0        0x0
- .rela.iplt     0x0000000000110ed0        0x0 _sonic.o
+.rela.dyn       0x0000000000111098        0x0
+ .rela.iplt     0x0000000000111098        0x0 _sonic.o
  .rela.text.boot
-                0x0000000000110ed0        0x0 _sonic.o
+                0x0000000000111098        0x0 _sonic.o
 
-.data           0x0000000000110ed0        0x0
- .data          0x0000000000110ed0        0x0 _sonic.o
- .data          0x0000000000110ed0        0x0 app.o
- .data          0x0000000000110ed0        0x0 start.o
+.data           0x0000000000111094        0x0
+ .data          0x0000000000111094        0x0 _sonic.o
+ .data          0x0000000000111094        0x0 app.o
+ .data          0x0000000000111094        0x0 start.o
 
-.igot.plt       0x0000000000110ed0        0x0
- .igot.plt      0x0000000000110ed0        0x0 _sonic.o
+.igot.plt       0x0000000000111098        0x0
+ .igot.plt      0x0000000000111098        0x0 _sonic.o
 
-.bss            0x0000000000110ed0        0x0
+.bss            0x0000000000111094        0x0
  *(.bss*)
- .bss           0x0000000000110ed0        0x0 _sonic.o
- .bss           0x0000000000110ed0        0x0 app.o
- .bss           0x0000000000110ed0        0x0 start.o
+ .bss           0x0000000000111094        0x0 _sonic.o
+ .bss           0x0000000000111094        0x0 app.o
+ .bss           0x0000000000111094        0x0 start.o
 
-.bss            0x0000000000110ed0        0x0
-                0x0000000000110ed0                . = ALIGN (0x10)
-                0x0000000000110ed0                __bss_start = .
+.bss            0x0000000000111094        0xc
+                0x00000000001110a0                . = ALIGN (0x10)
+ *fill*         0x0000000000111094        0xc 
+                0x00000000001110a0                __bss_start = .
  *(.bss .bss.*)
  *(COMMON)
-                0x0000000000110ed0                __bss_end = .
-                0x0000000000110ed0                _end = .
+                0x00000000001110a0                __bss_end = .
+                0x00000000001110a0                _end = .
                 0x0000000000000000                __bss_size = ((__bss_end - __bss_start) >> 0x3)
 OUTPUT(kernel8.elf elf64-littleaarch64)
 LOAD linker stubs
 
-.debug_line     0x0000000000000000      0x44f
- .debug_line    0x0000000000000000      0x2d8 _sonic.o
- .debug_line    0x00000000000002d8      0x127 app.o
- .debug_line    0x00000000000003ff       0x50 start.o
+.debug_line     0x0000000000000000      0x4c0
+ .debug_line    0x0000000000000000      0x349 _sonic.o
+ .debug_line    0x0000000000000349      0x127 app.o
+ .debug_line    0x0000000000000470       0x50 start.o
 
 .debug_info     0x0000000000000000       0x8a
  .debug_info    0x0000000000000000       0x2e _sonic.o
