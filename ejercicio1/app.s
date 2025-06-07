@@ -193,6 +193,19 @@ main:
     movk    w15, 0x00FF, lsl 16
     bl nube
    
+    
+    mov x11, 190
+    mov x12, 60
+    movz    w15, 0xFFFF, lsl 0
+    movk    w15, 0x00FF, lsl 16
+    bl nube
+    
+    mov x11, 500
+    mov x12, 55
+    movz    w15, 0xFFFF, lsl 0
+    movk    w15, 0x00FF, lsl 16
+    bl nube
+   
     //---------------------------------------------------------
     // Dibujar Sonic
     //---------------------------------------------------------
@@ -1049,8 +1062,8 @@ draw_sonic:
         mov x25, x11 //guardo el x inicial
         mov x26, x12 //guardo el y inicial
         mov x27, x13 //guardo el frame buffer
-        sub sp, sp, #8
-        str x30, [sp, #0]
+    stp x29, x30, [sp, #-16]!   
+    mov x29, sp                 
         //      picos
             //      pico 1
                 mov      x11, x25
@@ -1924,8 +1937,7 @@ draw_sonic:
                 movk    w15, 0x00FF, lsl 16  
                 bl      circuloparahernan
                 
-    ldr x30, [sp, #0]
-    add sp, sp, #8
+    ldp x29, x30, [sp], #16   
     ret
 
 
@@ -1942,8 +1954,8 @@ draw_sonic:
 
 draw_line:
 
-    stp x29, x30, [sp, #-16]!   // Guardar x29 (frame pointer) y x30 en la pila
-    mov x29, sp                 // (opcional, si usás stack frames)
+    stp x29, x30, [sp, #-16]!   
+    mov x29, sp                 
 
     SUB     x16, x13, x11    // dx = |xb - xa|
     mov     x0, x16
