@@ -12,5 +12,14 @@ Descripción ejercicio 2: Reutilizamos el fondo e hicimos que la nube se moviera
 
 
 Justificación instrucciones ARMv8:
+ usamos ldp que carga dos retgistros desde memoria contigua a una sola instruccion para guardar el link register
+ usamos sdp para guardar dos registros de memoria con usa sola instruccion para restaurar el link register
+ mul para hacer multiplicaciones
+ cmp realiza una comparacion y sertea las flags 
+ b para saltar a la posicion de memoria guardada en un registro especifico 
+ ret, lo suamos para volver del bl, lo que hace es que salta a la posicion guardada en x30
+ cset guarda uno o cero dependiendo de una condicion y lo usamos par ahacer un and and equals
+ 
+ 
+ 
 
----Completa Gabi---
