@@ -1,0 +1,16 @@
+Nombre y apellido 
+Integrante 1: Mael De Simone
+Integrante 2: Gabriel Meli
+Integrante 3: Hernan Pereyra
+Integrante 4: Sposetti Matías
+
+
+Descripción ejercicio 1: Hicimos un paisaje de un bosque con un sol, una nube, algunos pinos y un Sonic
+
+
+Descripción ejercicio 2: Reutilizamos el fondo e hicimos que la nube se moviera
+
+
+Justificación instrucciones ARMv8:
+
+---Completa Gabi---
